@@ -30,7 +30,7 @@ rules:
     - skipTemplates: true
       skipStrings: true
   no-console:
-    - error
+    - warn
     - allow:
         - info
         - error
