@@ -10,12 +10,6 @@ const posts = [
 
 const trpc = initTRPC.create()
 
-const x: string = '123'
-
-if (Math.random() + 2) {
-  console.log(x)
-}
-
 export const trpcRouter = trpc.router({
   getPosts: trpc.procedure.query(() => {
     return { posts }
