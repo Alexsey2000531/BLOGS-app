@@ -32,6 +32,7 @@
     .menu {
       display: flex;
       flex-direction: column;
+
       .item {
         &:not(:first-child) {
           margin-top: 5px;

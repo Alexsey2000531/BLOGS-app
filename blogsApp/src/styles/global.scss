@@ -1,5 +1,5 @@
 @use '../../node_modules/reset-css/sass/reset';
-@use './vars' as *;
+@use './vars.scss' as *;
 @use './mixins' as *;
 
 html,
@@ -20,8 +20,8 @@ body {
 }
 
 *,
-*::after,
-*::before {
+*:after,
+*:before {
   box-sizing: border-box;
 }
 
