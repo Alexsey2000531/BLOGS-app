@@ -1,19 +1,30 @@
 import { initTRPC } from '@trpc/server'
+import _ from 'lodash'
+import { z } from 'zod'
 
-const posts = [
-  { nick: 'cool-post-nick-1', name: 'Post 1', description: 'description of post 1...' },
-  { nick: 'cool-post-nick-2', name: 'Post 2', description: 'description of post 2...' },
-  { nick: 'cool-post-nick-3', name: 'Post 3', description: 'description of post 3...' },
-  { nick: 'cool-post-nick-4', name: 'Post 4', description: 'description of post 4...' },
-  { nick: 'cool-post-nick-5', name: 'Post 5', description: 'description of post 5...' },
-]
+const posts = _.times(100, (i) => ({
+  nick: `cool-idea-nick-${i + 1}`,
+  name: `Posts ${i + 1}`,
+  description: `Description of post ${i + 1}...`,
+  text: _.times(100, (j) => `<p>Text paragraph ${j} of post ${i + 1}...</p>`).join(''),
+}))
 
 const trpc = initTRPC.create()
 
 export const trpcRouter = trpc.router({
   getPosts: trpc.procedure.query(() => {
-    return { posts }
+    return { posts: posts.map((post) => _.pick(post, ['nick', 'name', 'description'])) }
   }),
+  getPost: trpc.procedure
+    .input(
+      z.object({
+        postNick: z.string(),
+      })
+    )
+    .query(({ input }) => {
+      const post = posts.find((post) => input.postNick === post.nick)
+      return { post: post || null }
+    }),
 })
 
 export type TrpcRouter = typeof trpcRouter

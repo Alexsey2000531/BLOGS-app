@@ -1,0 +1,9 @@
+@use '../../styles/mixins' as *;
+@use '../../styles/vars' as *;
+
+.text {
+  font-size: $defaultFontSize;
+  & > *:not(:first-child) {
+    margin-top: 10px;
+  }
+}

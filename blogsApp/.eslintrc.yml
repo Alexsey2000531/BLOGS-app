@@ -4,6 +4,7 @@ extends:
 parserOptions:
   project:
     - ./tsconfig.json
+    - ./tsconfig.node.json
 overrides:
   - files:
       - vite.config.ts
