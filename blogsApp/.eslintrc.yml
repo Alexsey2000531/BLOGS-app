@@ -10,3 +10,13 @@ overrides:
       - vite.config.ts
     parserOptions:
       project: ./tsconfig.node.json
+rules:
+  '@typescript-eslint/no-restricted-imports':
+    - error
+    - patterns:
+        - group:
+            - '@BLOGS/backend/**'
+            - '!@BLOGS/backend/**/'
+            - '!@BLOGS/backend/**/input'
+          allowTypeImports: true
+          message: 'Из внутреннего рабочего пространства разрешено импортировать только типы и схемы ввода.'

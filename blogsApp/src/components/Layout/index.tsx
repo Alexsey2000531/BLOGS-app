@@ -18,6 +18,36 @@ export const Layout = () => {
               Создать пост
             </Link>
           </li>
+          <li className={s.item}>
+            <Link className={s.link} to={getCreatePostRoute()}>
+              Редактировать пост
+            </Link>
+          </li>
+          <li className={s.item}>
+            <Link className={s.link} to={getCreatePostRoute()}>
+              Мои посты
+            </Link>
+          </li>
+          <li className={s.item}>
+            <Link className={s.link} to={getCreatePostRoute()}>
+              Понравившиеся посты
+            </Link>
+          </li>
+          <li className={s.itemBottom}>
+            <Link className={s.link} to={getCreatePostRoute()}>
+              Мой профиль
+            </Link>
+          </li>
+          <li className={s.item}>
+            <Link className={s.link} to={getCreatePostRoute()}>
+              Войти
+            </Link>
+          </li>
+          <li className={s.item}>
+            <Link className={s.link} to={getCreatePostRoute()}>
+              Регистрация
+            </Link>
+          </li>
         </ul>
       </div>
       <div className={s.content}>
