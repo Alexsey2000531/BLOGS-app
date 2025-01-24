@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import { useParams } from 'react-router-dom'
 import { Segment } from '../../components/Segment'
 import { type ViewPostRouteParams } from '../../lib/routes'
@@ -25,6 +26,7 @@ export const ViewPostPage = () => {
   return (
     <Segment title={data.post?.name} description={data.post?.description}>
       <div className={s.text} dangerouslySetInnerHTML={{ __html: data.post?.text }} />
+      <div className={s.date}>Пост создан: {format(data.post.createdAt, 'dd/MM/yyyy')}</div>
     </Segment>
   )
 }

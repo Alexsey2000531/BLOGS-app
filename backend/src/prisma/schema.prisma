@@ -8,9 +8,17 @@ datasource db {
 }
 
 model Post {
-      id          String @id @default(uuid())
-      nick        String @unique
+      id          String   @id @default(uuid())
+      nick        String   @unique
       name        String
       description String
       text        String
+      createdAt   DateTime @default(now())
+}
+
+model User {
+      id        String   @id @default(uuid())
+      nick      String   @unique
+      password  String
+      createdAt DateTime @default(now())
 }
