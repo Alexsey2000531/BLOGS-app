@@ -1,17 +1,21 @@
 import { zSignUpTrpcInput } from '@BLOGS/backend/src/router/signUp/input'
 import { useFormik } from 'formik'
 import { withZodSchema } from 'formik-validator-zod'
+import Cookies from 'js-cookie'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { Alert } from '../../components/Alert'
 import { Button } from '../../components/Button'
 import { FormItems } from '../../components/FormItems'
 import { Input } from '../../components/Input'
 import { Segment } from '../../components/Segment'
+import { getAllPostsRoute } from '../../lib/routes'
 import { trpc } from '../../lib/trpc'
 
 export const SignUpPage = () => {
-  const [successMessageVisible, setSuccessMessageVisible] = useState(false)
+  const navigate = useNavigate()
+  const trpcUtils = trpc.useContext()
   const [submittingError, setSubmittingError] = useState<string | null>(null)
   const signUp = trpc.signUp.useMutation()
   const formik = useFormik({
@@ -38,12 +42,10 @@ export const SignUpPage = () => {
     onSubmit: async (values) => {
       try {
         setSubmittingError(null)
-        await signUp.mutateAsync(values)
-        formik.resetForm()
-        setSuccessMessageVisible(true)
-        setTimeout(() => {
-          setSuccessMessageVisible(false)
-        }, 3000)
+        const { token } = await signUp.mutateAsync(values)
+        Cookies.set('token', token, { expires: 99999 })
+        void navigate(getAllPostsRoute())
+        void trpcUtils.invalidate()
       } catch (err: any) {
         setSubmittingError(err.message)
       }
@@ -59,7 +61,6 @@ export const SignUpPage = () => {
           <Input name="passwordAgain" label="Повторите пароль" type="password" formik={formik} />
           {!formik.isValid && !!formik.submitCount && <Alert color="red">Некоторые поля невалидны!</Alert>}
           {submittingError && <Alert color="red">{submittingError}</Alert>}
-          {successMessageVisible && <Alert color="green">Спасибо за регистрацию!</Alert>}
           <Button loading={formik.isSubmitting}>Зарегистрироваться</Button>
         </FormItems>
       </form>

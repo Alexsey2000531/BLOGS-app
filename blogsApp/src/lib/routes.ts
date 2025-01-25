@@ -13,3 +13,5 @@ export const getCreatePostRoute = () => '/posts/new'
 export const signUpRoute = () => '/sign-up'
 
 export const signInRoute = () => '/sign-in'
+
+export const signOutRoute = () => '/sign-out'

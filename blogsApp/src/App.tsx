@@ -7,6 +7,7 @@ import { CreatePostPage } from './pages/CreatePostPage'
 import { ViewPostPage } from './pages/ViewPostPage'
 import './styles/global.scss'
 import { SignInPage } from './pages/signInPage'
+import { SignOutPage } from './pages/signOutPage'
 import { SignUpPage } from './pages/signUpPage'
 
 export const App = () => {
@@ -14,6 +15,7 @@ export const App = () => {
     <TrpcProvider>
       <BrowserRouter>
         <Routes>
+          <Route path={router.signOutRoute()} element={<SignOutPage />} />
           <Route element={<Layout />}>
             <Route path={router.getAllPostsRoute()} element={<AllPostsPage />} />
             <Route path={router.getCreatePostRoute()} element={<CreatePostPage />} />
