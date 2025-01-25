@@ -1,5 +1,5 @@
 import { Link, Outlet } from 'react-router-dom'
-import { getAllPostsRoute, getCreatePostRoute } from '../../lib/routes'
+import { getAllPostsRoute, getCreatePostRoute, signUpRoute } from '../../lib/routes'
 import s from './index.module.scss'
 
 export const Layout = () => {
@@ -19,32 +19,7 @@ export const Layout = () => {
             </Link>
           </li>
           <li className={s.item}>
-            <Link className={s.link} to={getCreatePostRoute()}>
-              Редактировать пост
-            </Link>
-          </li>
-          <li className={s.item}>
-            <Link className={s.link} to={getCreatePostRoute()}>
-              Мои посты
-            </Link>
-          </li>
-          <li className={s.item}>
-            <Link className={s.link} to={getCreatePostRoute()}>
-              Понравившиеся посты
-            </Link>
-          </li>
-          <li className={s.itemBottom}>
-            <Link className={s.link} to={getCreatePostRoute()}>
-              Мой профиль
-            </Link>
-          </li>
-          <li className={s.item}>
-            <Link className={s.link} to={getCreatePostRoute()}>
-              Войти
-            </Link>
-          </li>
-          <li className={s.item}>
-            <Link className={s.link} to={getCreatePostRoute()}>
+            <Link className={s.link} to={signUpRoute()}>
               Регистрация
             </Link>
           </li>
