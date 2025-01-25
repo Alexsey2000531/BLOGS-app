@@ -6,6 +6,7 @@ import { AllPostsPage } from './pages/AllPostsPage'
 import { CreatePostPage } from './pages/CreatePostPage'
 import { ViewPostPage } from './pages/ViewPostPage'
 import './styles/global.scss'
+import { SignInPage } from './pages/signInPage'
 import { SignUpPage } from './pages/signUpPage'
 
 export const App = () => {
@@ -17,6 +18,7 @@ export const App = () => {
             <Route path={router.getAllPostsRoute()} element={<AllPostsPage />} />
             <Route path={router.getCreatePostRoute()} element={<CreatePostPage />} />
             <Route path={router.getViewPostRoute(router.viewPostRouteParams)} element={<ViewPostPage />} />
+            <Route path={router.signInRoute()} element={<SignInPage />} />
             <Route path={router.signUpRoute()} element={<SignUpPage />} />
           </Route>
         </Routes>

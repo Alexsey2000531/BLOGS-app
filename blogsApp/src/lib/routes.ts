@@ -11,3 +11,5 @@ export const getViewPostRoute = ({ postNick }: ViewPostRouteParams) => `/posts/$
 export const getCreatePostRoute = () => '/posts/new'
 
 export const signUpRoute = () => '/sign-up'
+
+export const signInRoute = () => '/sign-in'

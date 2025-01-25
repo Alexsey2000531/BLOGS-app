@@ -1,8 +1,7 @@
-import { zSignUpTrpcInput } from '@BLOGS/backend/src/router/signUp/input'
+import { zSignInTrpcRoute } from '@BLOGS/backend/src/router/signIn/input'
 import { useFormik } from 'formik'
 import { withZodSchema } from 'formik-validator-zod'
 import { useState } from 'react'
-import { z } from 'zod'
 import { Alert } from '../../components/Alert'
 import { Button } from '../../components/Button'
 import { FormItems } from '../../components/FormItems'
@@ -10,31 +9,16 @@ import { Input } from '../../components/Input'
 import { Segment } from '../../components/Segment'
 import { trpc } from '../../lib/trpc'
 
-export const SignUpPage = () => {
+export const SignInPage = () => {
   const [successMessageVisible, setSuccessMessageVisible] = useState(false)
   const [submittingError, setSubmittingError] = useState<string | null>(null)
-  const signUp = trpc.signUp.useMutation()
+  const signUp = trpc.signIn.useMutation()
   const formik = useFormik({
     initialValues: {
       nick: '',
       password: '',
-      passwordAgain: '',
     },
-    validate: withZodSchema(
-      zSignUpTrpcInput
-        .extend({
-          passwordAgain: z.string().min(8),
-        })
-        .superRefine((val, ctx) => {
-          if (val.password !== val.passwordAgain) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: 'Пароли должны быть одинаковыми!',
-              path: ['passwordAgain'],
-            })
-          }
-        })
-    ),
+    validate: withZodSchema(zSignInTrpcRoute),
     onSubmit: async (values) => {
       try {
         setSubmittingError(null)
@@ -51,16 +35,15 @@ export const SignUpPage = () => {
   })
 
   return (
-    <Segment title="Зарегистрироваться">
+    <Segment title="Войти">
       <form onSubmit={formik.handleSubmit}>
         <FormItems>
           <Input name="nick" label="Никнейм" formik={formik} />
           <Input name="password" label="Пароль" type="password" formik={formik} />
-          <Input name="passwordAgain" label="Повторите пароль" type="password" formik={formik} />
           {!formik.isValid && !!formik.submitCount && <Alert color="red">Некоторые поля невалидны!</Alert>}
+          {successMessageVisible && <Alert color="green">Добро пожаловать!</Alert>}
           {submittingError && <Alert color="red">{submittingError}</Alert>}
-          {successMessageVisible && <Alert color="green">Спасибо за регистрацию!</Alert>}
-          <Button loading={formik.isSubmitting}>Зарегистрироваться</Button>
+          <Button loading={formik.isSubmitting}>Войти</Button>
         </FormItems>
       </form>
     </Segment>
