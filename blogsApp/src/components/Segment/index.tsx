@@ -7,7 +7,7 @@ export const Segment = ({
   description,
   children,
 }: {
-  title: string
+  title: string | React.ReactNode
   size?: 1 | 2
   description?: string
   children?: React.ReactNode
