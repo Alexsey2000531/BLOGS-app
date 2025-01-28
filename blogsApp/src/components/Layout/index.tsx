@@ -23,7 +23,7 @@ export const Layout = () => {
                 </Link>
               </li>
               {/* <li className={s.item}>
-                <Link className={s.link} to={getEditPostRoute()}>
+                <Link className={s.link} to={getEditPostRoute({ postNick: post })}>
                   Редактировать пост
                 </Link>
               </li> */}

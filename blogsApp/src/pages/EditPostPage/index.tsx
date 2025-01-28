@@ -1,9 +1,6 @@
 import type { TrpcRouterOutput } from '@BLOGS/backend/src/router'
 import { zEditPostTrpcInput } from '@BLOGS/backend/src/router/EditPost/input'
-import { useFormik } from 'formik'
-import { withZodSchema } from 'formik-validator-zod'
 import pick from 'lodash/pick'
-import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Alert } from '../../components/Alert'
 import { Button } from '../../components/Button'
@@ -11,25 +8,22 @@ import { FormItems } from '../../components/FormItems'
 import { Input } from '../../components/Input'
 import { Segment } from '../../components/Segment'
 import { Textarea } from '../../components/Textarea'
+import { useForm } from '../../lib/form'
 import { type EditPostRouteParams, getViewPostRoute } from '../../lib/routes'
 import { trpc } from '../../lib/trpc'
 
 const EditPostComponent = ({ post }: { post: NonNullable<TrpcRouterOutput['getPost']['post']> }) => {
   const navigate = useNavigate()
-  const [submittingError, setSubmittingError] = useState<string | null>(null)
   const editPost = trpc.EditPost.useMutation()
-  const formik = useFormik({
+  const { formik, buttonProps, alertProps } = useForm({
     initialValues: pick(post, ['name', 'nick', 'description', 'text']),
-    validate: withZodSchema(zEditPostTrpcInput.omit({ PostId: true })),
+    validationSchema: zEditPostTrpcInput.omit({ PostId: true }),
     onSubmit: async (values) => {
-      try {
-        setSubmittingError(null)
-        await editPost.mutateAsync({ PostId: post.id, ...values })
-        void navigate(getViewPostRoute({ postNick: values.nick }))
-      } catch (err: any) {
-        setSubmittingError(err.message)
-      }
+      await editPost.mutateAsync({ PostId: post.id, ...values })
+      void navigate(getViewPostRoute({ postNick: values.nick }))
     },
+    resetOnSuccess: false,
+    showValidationAlert: true,
   })
 
   return (
@@ -39,9 +33,8 @@ const EditPostComponent = ({ post }: { post: NonNullable<TrpcRouterOutput['getPo
           <Input label="Заголовок" name="name" formik={formik} />
           <Input label="Краткое описание" name="description" maxWidth={500} formik={formik} />
           <Textarea label="Описание" name="text" formik={formik} />
-          {!formik.isValid && !!formik.submitCount && <Alert color="red">Некоторые поля не валидны!</Alert>}
-          {submittingError && <Alert color="red">{submittingError}</Alert>}
-          <Button loading={formik.isSubmitting}>Редактировать пост</Button>
+          <Alert {...alertProps} />
+          <Button {...buttonProps}>Редактировать пост!</Button>
         </FormItems>
       </form>
     </Segment>
