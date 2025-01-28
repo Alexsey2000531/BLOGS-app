@@ -22,6 +22,11 @@ export const Layout = () => {
                   Создать пост
                 </Link>
               </li>
+              {/* <li className={s.item}>
+                <Link className={s.link} to={getEditPostRoute()}>
+                  Редактировать пост
+                </Link>
+              </li> */}
               <li className={s.item}>
                 <Link className={s.link} to={signOutRoute()}>
                   Выйти ({data.me.nick})

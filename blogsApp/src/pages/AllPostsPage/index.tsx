@@ -1,3 +1,4 @@
+import { title } from 'process'
 import { Link } from 'react-router-dom'
 import { Segment } from '../../components/Segment'
 import { getViewPostRoute } from '../../lib/routes'
@@ -20,15 +21,10 @@ export const AllPostsPage = () => {
       <div className={s.posts}>
         {data.posts.map((post) => (
           <div className={s.post} key={post.nick}>
-            <Segment
-              description={post.description}
-              size={2}
-              title={
-                <Link className={s.postLink} to={getViewPostRoute({ postNick: post.nick })}>
-                  {post.name}
-                </Link>
-              }
-            />
+            <Segment description={post.description} size={2} title={title} />
+            <Link className={s.postLink} to={getViewPostRoute({ postNick: post.nick })}>
+              {post.name}
+            </Link>
           </div>
         ))}
       </div>

@@ -12,6 +12,14 @@ export const getPostTrpcRoute = trpc.procedure
       where: {
         nick: input.postNick,
       },
+      include: {
+        author: {
+          select: {
+            id: true,
+            nick: true,
+          },
+        },
+      },
     })
 
     return { post }

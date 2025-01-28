@@ -1,10 +1,22 @@
 @use '../../styles/mixins' as *;
 @use '../../styles/vars' as *;
 
-.date {
-  font-size: 12px;
-  margin-top: 10px;
-  text-align: end;
+.info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  .date {
+    font-size: 12px;
+    font-style: italic;
+  }
+
+  .author {
+    font-weight: bold;
+    font-size: 14px;
+  }
 }
 
 .text {
