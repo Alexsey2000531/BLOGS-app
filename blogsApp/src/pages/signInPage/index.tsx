@@ -1,17 +1,17 @@
 import { zSignInTrpcRoute } from '@BLOGS/backend/src/router/signIn/input'
 import Cookies from 'js-cookie'
-import { useNavigate } from 'react-router-dom'
 import { Alert } from '../../components/Alert'
 import { Button } from '../../components/Button'
 import { FormItems } from '../../components/FormItems'
 import { Input } from '../../components/Input'
 import { Segment } from '../../components/Segment'
 import { useForm } from '../../lib/form'
-import { getAllPostsRoute } from '../../lib/routes'
+import { wrapperPage } from '../../lib/pageWrapper'
 import { trpc } from '../../lib/trpc'
 
-export const SignInPage = () => {
-  const navigate = useNavigate()
+export const SignInPage = wrapperPage({
+  redirectAuthorized: true,
+})(() => {
   const trpcUtils = trpc.useContext()
   const signUp = trpc.signIn.useMutation()
   const { formik, buttonProps, alertProps } = useForm({
@@ -23,7 +23,6 @@ export const SignInPage = () => {
     onSubmit: async (values) => {
       const { token } = await signUp.mutateAsync(values)
       Cookies.set('token', token, { expires: 99999 })
-      void navigate(getAllPostsRoute())
       void trpcUtils.invalidate()
     },
     resetOnSuccess: false,
@@ -41,4 +40,4 @@ export const SignInPage = () => {
       </form>
     </Segment>
   )
-}
+})

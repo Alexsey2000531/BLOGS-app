@@ -1,10 +1,10 @@
 import { Link, Outlet } from 'react-router-dom'
+import { useMe } from '../../lib/ctx'
 import { getAllPostsRoute, getCreatePostRoute, signInRoute, signOutRoute, signUpRoute } from '../../lib/routes'
-import { trpc } from '../../lib/trpc'
 import s from './index.module.scss'
 
 export const Layout = () => {
-  const { data, isLoading, isFetching, isError } = trpc.getMe.useQuery()
+  const me = useMe()
   return (
     <div className={s.layout}>
       <div className={s.navigation}>
@@ -15,21 +15,16 @@ export const Layout = () => {
               Все посты
             </Link>
           </li>
-          {isLoading || isFetching || isError ? null : data.me ? (
+          {me ? (
             <>
               <li className={s.item}>
                 <Link className={s.link} to={getCreatePostRoute()}>
                   Создать пост
                 </Link>
               </li>
-              {/* <li className={s.item}>
-                <Link className={s.link} to={getEditPostRoute({ postNick: post })}>
-                  Редактировать пост
-                </Link>
-              </li> */}
               <li className={s.item}>
                 <Link className={s.link} to={signOutRoute()}>
-                  Выйти ({data.me.nick})
+                  Выйти ({me.nick})
                 </Link>
               </li>
             </>

@@ -6,9 +6,12 @@ import { Input } from '../../components/Input'
 import { Segment } from '../../components/Segment'
 import { Textarea } from '../../components/Textarea'
 import { useForm } from '../../lib/form'
+import { wrapperPage } from '../../lib/pageWrapper'
 import { trpc } from '../../lib/trpc'
 
-export const CreatePostPage = () => {
+export const CreatePostPage = wrapperPage({
+  authorizedOnly: true,
+})(() => {
   const createPost = trpc.createPost.useMutation()
   const { formik, buttonProps, alertProps } = useForm({
     initialValues: {
@@ -45,4 +48,4 @@ export const CreatePostPage = () => {
       </form>
     </Segment>
   )
-}
+})

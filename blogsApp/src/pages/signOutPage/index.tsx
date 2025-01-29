@@ -12,7 +12,7 @@ export const SignOutPage = () => {
     void trpcUtils.invalidate().then(() => {
       void navigate(signInRoute(), { replace: true })
     })
-  }, [])
+  }, [navigate])
 
   return <p>Loading...</p>
 }

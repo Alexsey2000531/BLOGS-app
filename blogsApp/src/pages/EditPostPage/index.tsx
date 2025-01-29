@@ -1,4 +1,3 @@
-import type { TrpcRouterOutput } from '@BLOGS/backend/src/router'
 import { zEditPostTrpcInput } from '@BLOGS/backend/src/router/EditPost/input'
 import pick from 'lodash/pick'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -9,10 +8,27 @@ import { Input } from '../../components/Input'
 import { Segment } from '../../components/Segment'
 import { Textarea } from '../../components/Textarea'
 import { useForm } from '../../lib/form'
+import { wrapperPage } from '../../lib/pageWrapper'
 import { type EditPostRouteParams, getViewPostRoute } from '../../lib/routes'
 import { trpc } from '../../lib/trpc'
 
-const EditPostComponent = ({ post }: { post: NonNullable<TrpcRouterOutput['getPost']['post']> }) => {
+export const EditPostPage = wrapperPage({
+  authorizedOnly: true,
+  useQuery: () => {
+    const { postNick } = useParams() as EditPostRouteParams
+    return trpc.getPost.useQuery({
+      postNick,
+    })
+  },
+  checkExists: ({ queryResult }) => !!queryResult.data.post,
+  checkExistsMessage: 'Пост не найден',
+  checkAccess: ({ queryResult, ctx }) => !!ctx.me && ctx.me.id === queryResult.data.post?.authorId,
+  checkAccessMessage: 'Идею может редактировать только автор!',
+  setProps: ({ queryResult }) => ({
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    post: queryResult.data.post!,
+  }),
+})(({ post }) => {
   const navigate = useNavigate()
   const editPost = trpc.EditPost.useMutation()
   const { formik, buttonProps, alertProps } = useForm({
@@ -39,41 +55,4 @@ const EditPostComponent = ({ post }: { post: NonNullable<TrpcRouterOutput['getPo
       </form>
     </Segment>
   )
-}
-
-export const EditPostPage = () => {
-  const { postNick } = useParams() as EditPostRouteParams
-  const getPostResult = trpc.getPost.useQuery({
-    postNick,
-  })
-  const getMeResult = trpc.getMe.useQuery()
-
-  if (getPostResult.isLoading || getMeResult.isLoading || getPostResult.isFetching || getMeResult.isFetching) {
-    return <span>Loading...</span>
-  }
-
-  if (getPostResult.isError) {
-    return <span>Error: {getPostResult.error.message}</span>
-  }
-
-  if (getMeResult.isError) {
-    return <span>Error: {getMeResult.error.message}</span>
-  }
-
-  if (!getPostResult.data.post) {
-    return <h1>Post not found!</h1>
-  }
-
-  const post = getPostResult.data.post
-  const me = getMeResult.data.me
-
-  if (!me) {
-    return <span>Только для авторизованных!</span>
-  }
-
-  if (me.id !== post.authorId) {
-    return <span>Пост можно редактировать только автор</span>
-  }
-
-  return <EditPostComponent post={post} />
-}
+})
