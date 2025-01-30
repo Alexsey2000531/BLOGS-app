@@ -10,12 +10,9 @@ import { trpc } from '../../../lib/trpc'
 
 export const ProfilePage = wrapperPage({
   authorizedOnly: true,
-  setProps: ({ ctx }) => {
-    return {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      me: ctx.me!,
-    }
-  },
+  setProps: ({ getAuthorizedMe }) => ({
+    me: getAuthorizedMe(),
+  }),
 })(({ me }) => {
   const trpcUtils = trpc.useContext()
   const updateProfile = trpc.updateProfile.useMutation()
