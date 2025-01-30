@@ -1,6 +1,13 @@
 import { Link, Outlet } from 'react-router-dom'
 import { useMe } from '../../lib/ctx'
-import { getAllPostsRoute, getCreatePostRoute, signInRoute, signOutRoute, signUpRoute } from '../../lib/routes'
+import {
+  getAllPostsRoute,
+  getCreatePostRoute,
+  signInRoute,
+  signOutRoute,
+  signUpRoute,
+  updateProfileRoute,
+} from '../../lib/routes'
 import s from './index.module.scss'
 
 export const Layout = () => {
@@ -20,6 +27,11 @@ export const Layout = () => {
               <li className={s.item}>
                 <Link className={s.link} to={getCreatePostRoute()}>
                   Создать пост
+                </Link>
+              </li>
+              <li className={s.item}>
+                <Link className={s.link} to={updateProfileRoute()}>
+                  Мой профиль
                 </Link>
               </li>
               <li className={s.item}>

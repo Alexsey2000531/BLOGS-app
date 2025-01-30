@@ -23,7 +23,10 @@ export const ViewPostPage = wrapperPage({
     <Segment title={'Мой пост'} description={post?.description}>
       <div className={s.text} dangerouslySetInnerHTML={{ __html: post?.text }} />
       <div className={s.info}>
-        <div className={s.author}>Автор: {post.author.nick}</div>
+        <div className={s.author}>
+          Автор: {post.author.nick}
+          {post.author.name ? `(${post.author.name})` : ''}
+        </div>
         <div className={s.date}>Дата публикации: {format(post.createdAt, 'dd.MM.yyyy')}</div>
       </div>
       {me?.id === post.authorId && (
