@@ -3,14 +3,15 @@ import { Layout } from './components/Layout'
 import { AppContextProvider } from './lib/ctx'
 import * as router from './lib/routes'
 import { TrpcProvider } from './lib/trpc'
-import { AllPostsPage } from './pages/AllPostsPage'
-import { CreatePostPage } from './pages/CreatePostPage'
-import { EditPostPage } from './pages/EditPostPage'
-import { ViewPostPage } from './pages/ViewPostPage'
+import { SignInPage } from './pages/auth/signInPage'
+import { SignOutPage } from './pages/auth/signOutPage'
+import { SignUpPage } from './pages/auth/signUpPage'
+import { NotFoundPage } from './pages/other/NotFoundPage'
+import { AllPostsPage } from './pages/posts/AllPostsPage'
+import { CreatePostPage } from './pages/posts/CreatePostPage'
+import { EditPostPage } from './pages/posts/EditPostPage'
+import { ViewPostPage } from './pages/posts/ViewPostPage'
 import './styles/global.scss'
-import { SignInPage } from './pages/signInPage'
-import { SignOutPage } from './pages/signOutPage'
-import { SignUpPage } from './pages/signUpPage'
 
 export const App = () => {
   return (
@@ -26,6 +27,7 @@ export const App = () => {
               <Route path={router.getEditPostRoute(router.editPostRouteParams)} element={<EditPostPage />} />
               <Route path={router.signInRoute()} element={<SignInPage />} />
               <Route path={router.signUpRoute()} element={<SignUpPage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>
         </BrowserRouter>

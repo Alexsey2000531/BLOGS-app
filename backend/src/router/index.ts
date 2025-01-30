@@ -1,14 +1,14 @@
 import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server'
 import { trpc } from '../lib/trpc'
-import { getEditPostTrpcRoute } from './EditPost'
-import { createPostTrpcRoute } from './createPost'
-import { getMeTrpcRoute } from './getMe'
+import { getMeTrpcRoute } from './auth/getMe'
+import { signInTrpcRoute } from './auth/signIn'
+import { signUpTrpcRoute } from './auth/signUp'
+import { getEditPostTrpcRoute } from './posts/EditPost'
+import { createPostTrpcRoute } from './posts/createPost'
 
 // @index('./**/index.ts', f => `import {${f.path.split('/').slice(0, -1).pop()}TrpcRoute} from '${f.path.split('/').slice(0, -1).join('/')}'`)
-import { getPostTrpcRoute } from './getPost'
-import { getPostsTrpcRoute } from './getPosts'
-import { signInTrpcRoute } from './signIn'
-import { signUpTrpcRoute } from './signUp'
+import { getPostTrpcRoute } from './posts/getPost'
+import { getPostsTrpcRoute } from './posts/getPosts'
 // @endindex
 
 export const trpcRouter = trpc.router({
