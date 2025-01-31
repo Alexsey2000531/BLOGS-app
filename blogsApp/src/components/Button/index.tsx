@@ -6,7 +6,11 @@ export type ButtonProps = { children: React.ReactNode; loading?: boolean }
 
 export const Button = ({ children, loading = false }: ButtonProps) => {
   return (
-    <button className={cn({ [s.button]: true, [s.disabled]: loading })} type="submit" disabled={loading}>
+    <button
+      className={cn({ [s.button]: true, [s.disabled]: loading, [s.loading]: loading })}
+      type="submit"
+      disabled={loading}
+    >
       {loading ? 'Отправка...' : children}
     </button>
   )

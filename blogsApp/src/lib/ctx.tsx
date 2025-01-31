@@ -1,5 +1,6 @@
 import type { TrpcRouterOutput } from '@BLOGS/backend/src/router'
 import { createContext, useContext } from 'react'
+import { Loader } from '../components/Loader'
 import { trpc } from './trpc'
 
 export type AppContext = {
@@ -14,7 +15,7 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
   const { data, error, isLoading, isFetching, isError } = trpc.getMe.useQuery()
   return (
     <AppReactContext.Provider value={{ me: data?.me || null }}>
-      {isLoading || isFetching ? <p>Загрузка...</p> : isError ? <p>Ошибка: {error.message}</p> : children}
+      {isLoading || isFetching ? <Loader type="page" /> : isError ? <p>Ошибка: {error.message}</p> : children}
     </AppReactContext.Provider>
   )
 }
