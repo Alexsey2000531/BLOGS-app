@@ -8,22 +8,48 @@ datasource db {
 }
 
 model Post {
-      id           String   @id @default(uuid())
-      nick         String   @unique
+      id           String    @id @default(uuid())
+      nick         String    @unique
       name         String
       description  String
       text         String
-      serialNumber Int      @unique @default(autoincrement())
-      createdAt    DateTime @default(now())
+      serialNumber Int       @unique @default(autoincrement())
+      createdAt    DateTime  @default(now())
       authorId     String
-      author       User     @relation(fields: [authorId], references: [id])
+      author       User      @relation(fields: [authorId], references: [id])
+      Like         Like[]
+      DisLike      DisLike[]
 }
 
 model User {
-      id        String   @id @default(uuid())
-      nick      String   @unique
-      name      String   @default("")
+      id        String    @id @default(uuid())
+      nick      String    @unique
+      name      String    @default("")
       password  String
-      createdAt DateTime @default(now())
+      createdAt DateTime  @default(now())
       posts     Post[]
+      Like      Like[]
+      DisLike   DisLike[]
+}
+
+model Like {
+      id        String   @id @default(uuid())
+      createdAt DateTime @default(now())
+      post      Post     @relation(fields: [postId], references: [id])
+      postId    String
+      author    User     @relation(fields: [authorId], references: [id])
+      authorId  String
+
+      @@unique([postId, authorId])
+}
+
+model DisLike {
+      id        String   @id @default(uuid())
+      createdAt DateTime @default(now())
+      post      Post     @relation(fields: [postId], references: [id])
+      postId    String
+      author    User     @relation(fields: [authorId], references: [id])
+      authorId  String
+
+      @@unique([postId, authorId])
 }

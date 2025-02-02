@@ -65,7 +65,11 @@ export const AllPostsPage = () => {
                       </Link>
                     }
                     description={post.description}
-                  />
+                  >
+                    Лайков: {post.likesCount}
+                    <br />
+                    Дизлайков: {post.disLikesCount}
+                  </Segment>
                 </div>
               ))}
           </InfiniteScroll>

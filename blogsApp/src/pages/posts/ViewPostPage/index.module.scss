@@ -26,3 +26,23 @@
     margin-top: 10px;
   }
 }
+
+.content_info {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.likes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.disLikes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}

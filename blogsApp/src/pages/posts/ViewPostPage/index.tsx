@@ -1,6 +1,8 @@
 import { format } from 'date-fns'
 import { useParams } from 'react-router-dom'
 import { LinkButton } from '../../../components/Button'
+import { DisLikeButton } from '../../../components/DisLikeButton'
+import { LikeButton } from '../../../components/LikesButton'
 import { Segment } from '../../../components/Segment'
 import { wrapperPage } from '../../../lib/pageWrapper'
 import { getEditPostRoute, type ViewPostRouteParams } from '../../../lib/routes'
@@ -18,6 +20,7 @@ export const ViewPostPage = wrapperPage({
     post: checkExists(queryResult.data.post, 'Пост не найден!'),
     me: ctx.me,
   }),
+  showLoaderOnFetching: false,
 })(({ post, me }) => {
   return (
     <Segment title={'Мой пост'} description={post?.description}>
@@ -28,6 +31,26 @@ export const ViewPostPage = wrapperPage({
           {post.author.name ? `(${post.author.name})` : ''}
         </div>
         <div className={s.date}>Дата публикации: {format(post.createdAt, 'dd.MM.yyyy')}</div>
+      </div>
+      <div className={s.content_info}>
+        <div className={s.likes}>
+          {me && (
+            <>
+              <br />
+              <LikeButton post={post} />
+            </>
+          )}
+          Лайков: {post.likeCount}
+        </div>
+        <div className={s.disLikes}>
+          {me && (
+            <>
+              <br />
+              <DisLikeButton post={post} />
+            </>
+          )}
+          Дизлайков: {post.disLikeCount}
+        </div>
       </div>
       {me?.id === post.authorId && (
         <div>

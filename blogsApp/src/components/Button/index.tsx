@@ -11,7 +11,7 @@ export const Button = ({ children, loading = false }: ButtonProps) => {
       type="submit"
       disabled={loading}
     >
-      {loading ? 'Отправка...' : children}
+      <span className={s.text}>{children}</span>
     </button>
   )
 }

@@ -11,6 +11,8 @@ import { createPostTrpcRoute } from './posts/createPost'
 // @index('./**/index.ts', f => `import {${f.path.split('/').slice(0, -1).pop()}TrpcRoute} from '${f.path.split('/').slice(0, -1).join('/')}'`)
 import { getPostTrpcRoute } from './posts/getPost'
 import { getPostsTrpcRoute } from './posts/getPosts'
+import { setDisLikePostTrpcRoute } from './posts/setDisLikePost'
+import { setLikePostTrpcRoute } from './posts/setLikePost'
 // @endindex
 
 export const trpcRouter = trpc.router({
@@ -23,6 +25,8 @@ export const trpcRouter = trpc.router({
   signIn: signInTrpcRoute,
   updateProfile: updateProfileTprcRoute,
   updatePassword: updatePasswordTrpcRoute,
+  setLikePost: setLikePostTrpcRoute,
+  setDisLikePost: setDisLikePostTrpcRoute,
 })
 
 export type TrpcRouter = typeof trpcRouter
