@@ -6,6 +6,7 @@ import { signUpTrpcRoute } from './auth/signUp'
 import { updatePasswordTrpcRoute } from './auth/updatePassword'
 import { updateProfileTprcRoute } from './auth/updateProfile'
 import { getEditPostTrpcRoute } from './posts/EditPost'
+import { blockedPostTrpcRoute } from './posts/blockedPost'
 import { createPostTrpcRoute } from './posts/createPost'
 
 // @index('./**/index.ts', f => `import {${f.path.split('/').slice(0, -1).pop()}TrpcRoute} from '${f.path.split('/').slice(0, -1).join('/')}'`)
@@ -27,6 +28,7 @@ export const trpcRouter = trpc.router({
   updatePassword: updatePasswordTrpcRoute,
   setLikePost: setLikePostTrpcRoute,
   setDisLikePost: setDisLikePostTrpcRoute,
+  blockPost: blockedPostTrpcRoute,
 })
 
 export type TrpcRouter = typeof trpcRouter

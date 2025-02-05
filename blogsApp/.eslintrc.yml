@@ -18,5 +18,6 @@ rules:
             - '@BLOGS/backend/**'
             - '!@BLOGS/backend/**/'
             - '!@BLOGS/backend/**/input'
+            - '!@BLOGS/backend/src/utils/canBlockedPost'
           allowTypeImports: true
           message: 'Из внутреннего рабочего пространства разрешено импортировать только типы и схемы ввода.'

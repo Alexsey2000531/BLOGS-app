@@ -1,5 +1,7 @@
+import { canBlockedPost, canEditPost } from '@BLOGS/backend/src/utils/canBlockedPost'
 import { format } from 'date-fns'
 import { useParams } from 'react-router-dom'
+import { BlockPost } from '../../../components/BlockPost'
 import { LinkButton } from '../../../components/Button'
 import { DisLikeButton } from '../../../components/DisLikeButton'
 import { LikeButton } from '../../../components/LikesButton'
@@ -52,9 +54,14 @@ export const ViewPostPage = wrapperPage({
           Дизлайков: {post.disLikeCount}
         </div>
       </div>
-      {me?.id === post.authorId && (
+      {canEditPost(me, post) && (
         <div>
           <LinkButton to={getEditPostRoute({ postNick: post.nick })}>Редактировать пост</LinkButton>
+        </div>
+      )}
+      {canBlockedPost(me) && (
+        <div className={s.blocksPost}>
+          <BlockPost post={post} />
         </div>
       )}
     </Segment>

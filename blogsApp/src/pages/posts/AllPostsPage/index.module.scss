@@ -1,6 +1,10 @@
 @use '../../../styles/mixins' as *;
 @use '../../../styles/vars' as *;
 
+.filter {
+  margin-block: 20px;
+}
+
 .posts {
   .post {
     padding: 20px;

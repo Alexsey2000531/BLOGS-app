@@ -1,4 +1,5 @@
 import { zEditPostTrpcInput } from '@BLOGS/backend/src/router/posts/EditPost/input'
+import { canEditPost } from '@BLOGS/backend/src/utils/canBlockedPost'
 import pick from 'lodash/pick'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Alert } from '../../../components/Alert'
@@ -22,7 +23,7 @@ export const EditPostPage = wrapperPage({
   },
   setProps: ({ queryResult, ctx, checkExists, checkAccess }) => {
     const post = checkExists(queryResult.data.post, 'Пост не найден!')
-    checkAccess(ctx.me?.id === post.authorId, 'Пост может редактировать только автор!')
+    checkAccess(canEditPost(ctx.me, post), 'Пост может редактировать только автор!')
     return {
       post,
     }
@@ -49,7 +50,9 @@ export const EditPostPage = wrapperPage({
           <Input label="Краткое описание" name="description" maxWidth={500} formik={formik} />
           <Textarea label="Описание" name="text" formik={formik} />
           <Alert {...alertProps} />
-          <Button {...buttonProps}>Редактировать пост!</Button>
+          <Button color="blue" {...buttonProps}>
+            Редактировать пост!
+          </Button>
         </FormItems>
       </form>
     </Segment>

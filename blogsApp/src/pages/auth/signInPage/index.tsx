@@ -35,7 +35,9 @@ export const SignInPage = wrapperPage({
           <Input name="nick" label="Никнейм" formik={formik} />
           <Input name="password" label="Пароль" type="password" formik={formik} />
           <Alert {...alertProps} />
-          <Button {...buttonProps}>Войти</Button>
+          <Button color="green" {...buttonProps}>
+            Войти
+          </Button>
         </FormItems>
       </form>
     </Segment>

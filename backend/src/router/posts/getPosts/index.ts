@@ -3,6 +3,13 @@ import { trpc } from '../../../lib/trpc'
 import { zGetPostsTrpcInput } from './input'
 
 export const getPostsTrpcRoute = trpc.procedure.input(zGetPostsTrpcInput).query(async ({ ctx, input }) => {
+  const normalizedSearch = input.search
+    ? input.search
+        .trim()
+        .split(/\s+/) // Разбиваем на слова
+        .map((word) => `${word}:*`) // Добавляем поддержку частичного совпадения
+        .join(' & ')
+    : undefined
   const rawPosts = await ctx.prisma.post.findMany({
     select: {
       id: true,
@@ -18,6 +25,30 @@ export const getPostsTrpcRoute = trpc.procedure.input(zGetPostsTrpcInput).query(
           DisLike: true,
         },
       },
+    },
+    where: {
+      blockedAt: null,
+      ...(!normalizedSearch
+        ? {}
+        : {
+            OR: [
+              {
+                name: {
+                  search: normalizedSearch,
+                },
+              },
+              {
+                description: {
+                  search: normalizedSearch,
+                },
+              },
+              {
+                text: {
+                  search: normalizedSearch,
+                },
+              },
+            ],
+          }),
     },
     orderBy: [
       {

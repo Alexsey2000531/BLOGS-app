@@ -43,7 +43,9 @@ export const CreatePostPage = wrapperPage({
           <Input name="description" label="Описание" formik={formik} maxWidth={500} />
           <Textarea name="text" label="Текст" formik={formik} />
           <Alert {...alertProps} />
-          <Button {...buttonProps}>Создать пост!</Button>
+          <Button color="green" {...buttonProps}>
+            Создать пост!
+          </Button>
         </FormItems>
       </form>
     </Segment>

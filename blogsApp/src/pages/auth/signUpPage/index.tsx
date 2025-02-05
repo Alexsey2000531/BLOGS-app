@@ -50,7 +50,9 @@ export const SignUpPage = wrapperPage({
           <Input name="password" label="Пароль" type="password" formik={formik} />
           <Input name="passwordAgain" label="Повторите пароль" type="password" formik={formik} />
           <Alert {...alertProps} />
-          <Button {...buttonProps}>Зарегистрироваться!</Button>
+          <Button color="green" {...buttonProps}>
+            Зарегистрироваться!
+          </Button>
         </FormItems>
       </form>
     </Segment>

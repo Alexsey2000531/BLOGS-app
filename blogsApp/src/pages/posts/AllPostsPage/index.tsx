@@ -1,18 +1,35 @@
+import { zGetPostsTrpcInput } from '@BLOGS/backend/src/router/posts/getPosts/input'
+import { useEffect } from 'react'
 import InfiniteScroll from 'react-infinite-scroller'
 import { Link } from 'react-router-dom'
+import { useDebounceValue } from 'usehooks-ts'
 import { Alert } from '../../../components/Alert'
+import { Input } from '../../../components/Input'
 import { layoutContentElRef } from '../../../components/Layout'
 import { Loader } from '../../../components/Loader'
 import { Segment } from '../../../components/Segment'
+import { useForm } from '../../../lib/form'
 import { getViewPostRoute } from '../../../lib/routes'
 import { trpc } from '../../../lib/trpc'
 import s from './index.module.scss'
 
 export const AllPostsPage = () => {
+  const { formik } = useForm({
+    initialValues: {
+      search: '',
+    },
+    validationSchema: zGetPostsTrpcInput.pick({ search: true }),
+  })
+  const [search, setSearch] = useDebounceValue(formik.values.search, 500)
+
+  useEffect(() => {
+    setSearch(formik.values.search)
+  }, [formik.values.search])
+
   const { data, error, isLoading, isFetching, isError, hasNextPage, fetchNextPage, isFetchingNextPage, isRefetching } =
     trpc.getPosts.useInfiniteQuery(
       {
-        limit: 2,
+        search,
       },
       {
         getNextPageParam: (lastPage) => {
@@ -31,10 +48,15 @@ export const AllPostsPage = () => {
 
   return (
     <Segment title="Все посты">
+      <div className={s.filter}>
+        <Input maxWidth={'100%'} label="Поиск" name="search" formik={formik} />
+      </div>
       {isLoading || isRefetching ? (
         <Loader type="section" />
       ) : isError ? (
         <Alert color="red">{error}</Alert>
+      ) : !data.pages[0].posts?.length ? (
+        <Alert color="brown">Ничего не найдено по поиску!</Alert>
       ) : (
         <div className={s.posts}>
           <InfiniteScroll

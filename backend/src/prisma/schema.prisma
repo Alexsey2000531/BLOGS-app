@@ -1,5 +1,6 @@
 generator client {
-      provider = "prisma-client-js"
+      provider        = "prisma-client-js"
+      previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -19,17 +20,24 @@ model Post {
       author       User      @relation(fields: [authorId], references: [id])
       Like         Like[]
       DisLike      DisLike[]
+      blockedAt    DateTime?
 }
 
 model User {
-      id        String    @id @default(uuid())
-      nick      String    @unique
-      name      String    @default("")
-      password  String
-      createdAt DateTime  @default(now())
-      posts     Post[]
-      Like      Like[]
-      DisLike   DisLike[]
+      id          String           @id @default(uuid())
+      nick        String           @unique
+      name        String           @default("")
+      password    String
+      createdAt   DateTime         @default(now())
+      posts       Post[]
+      Like        Like[]
+      DisLike     DisLike[]
+      permissions UserPermission[]
+}
+
+enum UserPermission {
+      BLOCK_POST
+      ALL
 }
 
 model Like {

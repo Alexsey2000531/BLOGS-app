@@ -33,7 +33,9 @@ const General = ({ me }: { me: NonNullable<TrpcRouterOutput['getMe']['me']> }) =
         <Input label="Никнейм" name="nick" formik={formik} />
         <Input label="Имя" name="name" formik={formik} />
         <Alert {...alertProps} />
-        <Button {...buttonProps}>Редактировать профиль!</Button>
+        <Button color="green" {...buttonProps}>
+          Редактировать профиль!
+        </Button>
       </FormItems>
     </form>
   )

@@ -27,7 +27,7 @@ export const setDisLikePostTrpcRoute = trpc.procedure.input(zSetDisLikePostInput
       },
     })
 
-    // ставим дтзлайк на пост
+    // ставим дbзлайк на пост
     await ctx.prisma.disLike.upsert({
       where: {
         postId_authorId: {

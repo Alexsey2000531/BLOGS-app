@@ -46,6 +46,10 @@ export const getPostTrpcRoute = trpc.procedure
       },
     })
 
+    if (rawPost?.blockedAt) {
+      throw new Error('Этот пост заблокировал администратор!')
+    }
+
     const isLikedByMe = !!rawPost?.Like.length
     const isDisLikedByMe = !!rawPost?.DisLike.length
 

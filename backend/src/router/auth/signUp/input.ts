@@ -5,5 +5,5 @@ export const zSignUpTrpcInput = z.object({
     .string()
     .min(5)
     .regex(/^[a-z0-9-]+$/, 'Никнейм может содержать строчные буквы, цифры и тире'),
-  password: z.string().min(8),
+  password: z.string().min(1),
 })
