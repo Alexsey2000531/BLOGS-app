@@ -28,6 +28,7 @@ export const EditPostPage = wrapperPage({
       post,
     }
   },
+  title: ({ post }) => `Редактировать пост "${post.name}"`,
 })(({ post }) => {
   const navigate = useNavigate()
   const editPost = trpc.EditPost.useMutation()
@@ -50,7 +51,7 @@ export const EditPostPage = wrapperPage({
           <Input label="Краткое описание" name="description" maxWidth={500} formik={formik} />
           <Textarea label="Описание" name="text" formik={formik} />
           <Alert {...alertProps} />
-          <Button color="blue" {...buttonProps}>
+          <Button color="green" {...buttonProps}>
             Редактировать пост!
           </Button>
         </FormItems>

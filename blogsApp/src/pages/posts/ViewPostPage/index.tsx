@@ -23,6 +23,7 @@ export const ViewPostPage = wrapperPage({
     me: ctx.me,
   }),
   showLoaderOnFetching: false,
+  title: ({ post }) => post.name,
 })(({ post, me }) => {
   return (
     <Segment title={'Мой пост'} description={post?.description}>
@@ -42,7 +43,7 @@ export const ViewPostPage = wrapperPage({
               <LikeButton post={post} />
             </>
           )}
-          Лайков: {post.likeCount}
+          {post.likeCount}
         </div>
         <div className={s.disLikes}>
           {me && (
@@ -51,7 +52,7 @@ export const ViewPostPage = wrapperPage({
               <DisLikeButton post={post} />
             </>
           )}
-          Дизлайков: {post.disLikeCount}
+          {post.disLikeCount}
         </div>
       </div>
       {canEditPost(me, post) && (

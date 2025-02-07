@@ -75,7 +75,9 @@ const Password = () => {
         <Input label="Новый пароль" name="newPassword" type="password" formik={formik} />
         <Input label="Повторите новый пароль" name="newPasswordAgain" type="password" formik={formik} />
         <Alert {...alertProps} />
-        <Button {...buttonProps}>Изменить пароль!</Button>
+        <Button color="green" {...buttonProps}>
+          Изменить пароль!
+        </Button>
       </FormItems>
     </form>
   )
@@ -83,6 +85,7 @@ const Password = () => {
 
 export const ProfilePage = wrapperPage({
   authorizedOnly: true,
+  title: 'Профиль',
   setProps: ({ getAuthorizedMe }) => ({
     me: getAuthorizedMe(),
   }),

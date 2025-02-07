@@ -1,4 +1,6 @@
+import notFoundImage from '../../../assets/images/404.png'
 import { ErrorPageComponent } from '../../../components/ErrorPageComponent'
+import s from './index.module.scss'
 
 export const NotFoundPage = ({
   title = 'Страница не найдена!',
@@ -7,5 +9,9 @@ export const NotFoundPage = ({
   title?: string
   message?: string
 }) => {
-  return <ErrorPageComponent title={title} message={message} />
+  return (
+    <ErrorPageComponent title={title} message={message}>
+      <img className={s.image} src={notFoundImage} alt="Ошибка 404" />
+    </ErrorPageComponent>
+  )
 }

@@ -1,5 +1,6 @@
 import type { TrpcRouterOutput } from '@BLOGS/backend/src/router'
 import { trpc } from '../../lib/trpc'
+import { Icon } from '../icon'
 import s from './index.module.scss'
 
 export const LikeButton = ({ post }: { post: NonNullable<TrpcRouterOutput['getPost']['post']> }) => {
@@ -31,7 +32,7 @@ export const LikeButton = ({ post }: { post: NonNullable<TrpcRouterOutput['getPo
         void setLikePost.mutateAsync({ postId: post.id, isLikedByMe: !post.isLikedByMe })
       }}
     >
-      {post.isLikedByMe ? '' : 'Нравится'}
+      {post.isLikedByMe ? <Icon size={24} name="likeFilled" /> : <Icon size={24} name="likeEmpty" />}
     </button>
   )
 }

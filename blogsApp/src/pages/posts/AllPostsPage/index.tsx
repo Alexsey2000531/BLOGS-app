@@ -9,11 +9,15 @@ import { layoutContentElRef } from '../../../components/Layout'
 import { Loader } from '../../../components/Loader'
 import { Segment } from '../../../components/Segment'
 import { useForm } from '../../../lib/form'
+import { wrapperPage } from '../../../lib/pageWrapper'
 import { getViewPostRoute } from '../../../lib/routes'
 import { trpc } from '../../../lib/trpc'
 import s from './index.module.scss'
 
-export const AllPostsPage = () => {
+export const AllPostsPage = wrapperPage({
+  title: 'BLOGS APP',
+  isTitleExact: true,
+})(() => {
   const { formik } = useForm({
     initialValues: {
       search: '',
@@ -99,4 +103,4 @@ export const AllPostsPage = () => {
       )}
     </Segment>
   )
-}
+})

@@ -11,6 +11,7 @@ import { trpc } from '../../../lib/trpc'
 
 export const CreatePostPage = wrapperPage({
   authorizedOnly: true,
+  title: 'Новый пост',
 })(() => {
   const createPost = trpc.createPost.useMutation()
   const { formik, buttonProps, alertProps } = useForm({

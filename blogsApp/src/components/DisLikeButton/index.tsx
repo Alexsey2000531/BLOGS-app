@@ -1,5 +1,6 @@
 import type { TrpcRouterOutput } from '@BLOGS/backend/src/router'
 import { trpc } from '../../lib/trpc'
+import { Icon } from '../icon'
 import s from './index.module.scss'
 
 export const DisLikeButton = ({ post }: { post: NonNullable<TrpcRouterOutput['getPost']['post']> }) => {
@@ -31,7 +32,7 @@ export const DisLikeButton = ({ post }: { post: NonNullable<TrpcRouterOutput['ge
         void setDisLikePost.mutateAsync({ postId: post.id, isDisLikedByMe: !post.isDisLikedByMe })
       }}
     >
-      {post.isDisLikedByMe ? '' : 'Не нравится'}
+      {post.isDisLikedByMe ? <Icon size={24} name="dislikeFilled" /> : <Icon size={24} name="dislikeEmpty" />}
     </button>
   )
 }
