@@ -1,5 +1,6 @@
 import { createRef } from 'react'
 import { Link, Outlet } from 'react-router-dom'
+import Logo from '../../assets/images/logo.svg?react'
 import { useMe } from '../../lib/ctx'
 import {
   getAllPostsRoute,
@@ -18,7 +19,7 @@ export const Layout = () => {
   return (
     <div className={s.layout}>
       <div className={s.navigation}>
-        <div className={s.logo}>BLOGS</div>
+        <Logo className={s.logo} />
         <ul className={s.menu}>
           <li className={s.item}>
             <Link className={s.link} to={getAllPostsRoute()}>

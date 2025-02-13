@@ -95,6 +95,8 @@ export const AllPostsPage = wrapperPage({
                     Лайков: {post.likesCount}
                     <br />
                     Дизлайков: {post.disLikesCount}
+                    <br />
+                    Комментариев: {post.commentsCount}
                   </Segment>
                 </div>
               ))}

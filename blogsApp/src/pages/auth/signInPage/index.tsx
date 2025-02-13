@@ -18,6 +18,7 @@ export const SignInPage = wrapperPage({
   const { formik, buttonProps, alertProps } = useForm({
     initialValues: {
       nick: '',
+      email: '',
       password: '',
     },
     validationSchema: zSignInTrpcRoute,
@@ -34,6 +35,7 @@ export const SignInPage = wrapperPage({
       <form onSubmit={formik.handleSubmit}>
         <FormItems>
           <Input name="nick" label="Никнейм" formik={formik} />
+          <Input name="email" label="E-mail" formik={formik} />
           <Input name="password" label="Пароль" type="password" formik={formik} />
           <Alert {...alertProps} />
           <Button color="green" {...buttonProps}>

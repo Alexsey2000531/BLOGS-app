@@ -1,6 +1,6 @@
 generator client {
       provider        = "prisma-client-js"
-      previewFeatures = ["fullTextSearch"]
+      previewFeatures = ["fullTextSearchPostgres"]
 }
 
 datasource db {
@@ -9,30 +9,33 @@ datasource db {
 }
 
 model Post {
-      id           String    @id @default(uuid())
-      nick         String    @unique
+      id           String     @id @default(uuid())
+      nick         String     @unique
       name         String
       description  String
       text         String
-      serialNumber Int       @unique @default(autoincrement())
-      createdAt    DateTime  @default(now())
+      serialNumber Int        @unique @default(autoincrement())
+      createdAt    DateTime   @default(now())
       authorId     String
-      author       User      @relation(fields: [authorId], references: [id])
+      author       User       @relation(fields: [authorId], references: [id])
       Like         Like[]
       DisLike      DisLike[]
       blockedAt    DateTime?
+      Comments     Comments[]
 }
 
 model User {
       id          String           @id @default(uuid())
       nick        String           @unique
       name        String           @default("")
+      email       String           @unique
       password    String
       createdAt   DateTime         @default(now())
       posts       Post[]
       Like        Like[]
       DisLike     DisLike[]
       permissions UserPermission[]
+      Comments    Comments[]
 }
 
 enum UserPermission {
@@ -60,4 +63,17 @@ model DisLike {
       authorId  String
 
       @@unique([postId, authorId])
+}
+
+model Comments {
+      id        String   @id @default(uuid())
+      content   String
+      createdAt DateTime @default(now())
+      updateAt  DateTime @updatedAt
+      post      Post     @relation(fields: [postId], references: [id])
+      postId    String
+      author    User     @relation(fields: [authorId], references: [id])
+      authorId  String
+
+      @@index([postId])
 }

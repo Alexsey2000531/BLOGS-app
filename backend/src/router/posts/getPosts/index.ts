@@ -23,6 +23,7 @@ export const getPostsTrpcRoute = trpc.procedure.input(zGetPostsTrpcInput).query(
         select: {
           Like: true,
           DisLike: true,
+          Comments: true,
         },
       },
     },
@@ -69,6 +70,7 @@ export const getPostsTrpcRoute = trpc.procedure.input(zGetPostsTrpcInput).query(
     ..._.omit(post, ['_count']),
     likesCount: post._count.Like,
     disLikesCount: post._count.DisLike,
+    commentsCount: post._count.Comments,
   }))
 
   return { posts: postsExceptNext, nextCursor }

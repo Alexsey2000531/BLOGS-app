@@ -50,3 +50,9 @@
 .blockPost {
   margin-top: 20px;
 }
+
+.postInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

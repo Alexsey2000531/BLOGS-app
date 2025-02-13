@@ -14,6 +14,14 @@ export const getPostTrpcRoute = trpc.procedure
         nick: input.postNick,
       },
       include: {
+        Comments: {
+          include: {
+            author: true,
+          },
+          orderBy: {
+            createdAt: 'asc',
+          },
+        },
         author: {
           select: {
             id: true,
@@ -41,6 +49,7 @@ export const getPostTrpcRoute = trpc.procedure
           select: {
             Like: true,
             DisLike: true,
+            Comments: true,
           },
         },
       },
@@ -56,12 +65,16 @@ export const getPostTrpcRoute = trpc.procedure
     const likeCount = rawPost?._count.Like || 0
     const disLikeCount = rawPost?._count.DisLike || 0
 
+    const commentsCount = rawPost?._count.Comments || 0
+
     const post = rawPost && {
       ..._.omit(rawPost, ['Like', 'DisLike', '_count']),
+      Comments: rawPost.Comments,
       isLikedByMe,
       likeCount,
       isDisLikedByMe,
       disLikeCount,
+      commentsCount,
     }
 
     return { post }

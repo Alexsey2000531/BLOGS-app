@@ -10,6 +10,8 @@ import { wrapperPage } from '../../../lib/pageWrapper'
 import { getEditPostRoute, type ViewPostRouteParams } from '../../../lib/routes'
 import { trpc } from '../../../lib/trpc'
 import s from './index.module.scss'
+import { Comment } from '../../../components/Comment'
+import { CommentsList } from '../../../components/CommentList'
 
 export const ViewPostPage = wrapperPage({
   useQuery: () => {
@@ -35,36 +37,42 @@ export const ViewPostPage = wrapperPage({
         </div>
         <div className={s.date}>Дата публикации: {format(post.createdAt, 'dd.MM.yyyy')}</div>
       </div>
-      <div className={s.content_info}>
-        <div className={s.likes}>
-          {me && (
-            <>
-              <br />
-              <LikeButton post={post} />
-            </>
-          )}
-          {post.likeCount}
+      <CommentsList postNick={post.nick} />
+      <div className={s.postInfo}>
+        <div className={s.formComments}>{me && <Comment postId={post.id} authorId={me.id} />}</div>
+        <div className={s.content_info}>
+          <div className={s.likes}>
+            {me && (
+              <>
+                <br />
+                <LikeButton post={post} />
+              </>
+            )}
+            {post.likeCount}
+            {!me && <p>Лайков: {post.likeCount}</p>}
+          </div>
+          <div className={s.disLikes}>
+            {me && (
+              <>
+                <br />
+                <DisLikeButton post={post} />
+              </>
+            )}
+            {post.disLikeCount}
+            {!me && <p>Дизлайков: {post.disLikeCount}</p>}
+          </div>
         </div>
-        <div className={s.disLikes}>
-          {me && (
-            <>
-              <br />
-              <DisLikeButton post={post} />
-            </>
-          )}
-          {post.disLikeCount}
-        </div>
+        {canEditPost(me, post) && (
+          <div>
+            <LinkButton to={getEditPostRoute({ postNick: post.nick })}>Редактировать пост</LinkButton>
+          </div>
+        )}
+        {canBlockedPost(me) && (
+          <div className={s.blocksPost}>
+            <BlockPost post={post} />
+          </div>
+        )}
       </div>
-      {canEditPost(me, post) && (
-        <div>
-          <LinkButton to={getEditPostRoute({ postNick: post.nick })}>Редактировать пост</LinkButton>
-        </div>
-      )}
-      {canBlockedPost(me) && (
-        <div className={s.blocksPost}>
-          <BlockPost post={post} />
-        </div>
-      )}
     </Segment>
   )
 })
