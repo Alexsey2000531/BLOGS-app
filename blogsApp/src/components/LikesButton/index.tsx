@@ -14,7 +14,7 @@ export const LikeButton = ({ post }: { post: NonNullable<TrpcRouterOutput['getPo
           post: {
             ...oldGetPostData.post,
             isLikedByMe,
-            // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+
             likeCount: oldGetPostData.post.likeCount + (isLikedByMe ? 1 : -1),
           },
         }

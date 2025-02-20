@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import InfiniteScroll from 'react-infinite-scroller'
 import { Link } from 'react-router-dom'
 import { useDebounceValue } from 'usehooks-ts'
+import s from './index.module.scss'
 import { Alert } from '../../../components/Alert'
 import { Input } from '../../../components/Input'
 import { layoutContentElRef } from '../../../components/Layout'
@@ -12,7 +13,6 @@ import { useForm } from '../../../lib/form'
 import { wrapperPage } from '../../../lib/pageWrapper'
 import { getViewPostRoute } from '../../../lib/routes'
 import { trpc } from '../../../lib/trpc'
-import s from './index.module.scss'
 
 export const AllPostsPage = wrapperPage({
   title: 'BLOGS APP',
@@ -77,6 +77,7 @@ export const AllPostsPage = wrapperPage({
               </div>
             }
             getScrollParent={() => layoutContentElRef.current}
+            // eslint-disable-next-line no-undef
             useWindow={(layoutContentElRef.current && getComputedStyle(layoutContentElRef.current).overflow) !== 'auto'}
           >
             {data.pages

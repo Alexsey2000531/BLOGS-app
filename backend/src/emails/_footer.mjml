@@ -5,9 +5,7 @@
   <mj-body>
     <mj-section padding="0">
       <mj-column>
-        <mj-text mj-class="text" padding-top="30px" padding-bottom="20px" align="left" color="#aaaaaa"
-          >Support the post that inspire you
-        </mj-text>
+        <mj-text mj-class="text" padding-top="30px" padding-bottom="20px" align="left" color="#aaaaaa">Footer </mj-text>
       </mj-column>
     </mj-section>
   </mj-body>

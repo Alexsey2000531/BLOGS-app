@@ -1,4 +1,5 @@
 import cn from 'classnames'
+import React from 'react'
 import s from './index.module.scss'
 
 export type AlertProps = { color: 'red' | 'green' | 'brown'; hidden?: boolean; children: React.ReactNode }

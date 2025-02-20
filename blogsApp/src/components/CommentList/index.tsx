@@ -1,6 +1,6 @@
-import { trpc } from '../../lib/trpc'
 import { format } from 'date-fns'
 import s from './index.module.scss'
+import { trpc } from '../../lib/trpc'
 
 export const CommentsList = ({ postNick }: { postNick: string }) => {
   const { data, isLoading } = trpc.getPost.useQuery({ postNick })

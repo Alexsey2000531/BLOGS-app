@@ -36,5 +36,5 @@ export const zCreateCommentsTrpcRoute = trpc.procedure
       },
     })
 
-    return true
+    return addComments
   })

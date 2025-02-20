@@ -1,13 +1,18 @@
-import { trpc } from '../../lib/trpc'
 import { zCreateCommentsTrpcInput } from '@BLOGS/backend/src/router/posts/createComments/input'
+import { useForm } from '../../lib/form'
+import { trpc } from '../../lib/trpc'
 import { Button } from '../Button'
 import { Input } from '../Input'
-import { useForm } from '../../lib/form'
 import s from './index.module.scss'
 import { Alert } from '../Alert'
 
 export const Comment = ({ postId, authorId }: { postId: string; authorId: string }) => {
-  const commentsTrpc = trpc.addComments.useMutation()
+  const utils = trpc.useContext()
+  const commentsTrpc = trpc.addComments.useMutation({
+    onSuccess: () => {
+      utils.getPost.invalidate()
+    },
+  })
   const { formik, alertProps, buttonProps } = useForm({
     initialValues: {
       postId,
@@ -16,7 +21,7 @@ export const Comment = ({ postId, authorId }: { postId: string; authorId: string
     },
     validationSchema: zCreateCommentsTrpcInput,
     onSubmit: async (values) => {
-      await commentsTrpc.mutate({ postId, authorId, content: values.content })
+      await commentsTrpc.mutateAsync({ postId, authorId, content: values.content })
     },
     successMessage: 'Комментарий успешно добавлен!',
     resetOnSuccess: true,

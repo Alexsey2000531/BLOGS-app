@@ -1,17 +1,17 @@
 import { canBlockedPost, canEditPost } from '@BLOGS/backend/src/utils/canBlockedPost'
 import { format } from 'date-fns'
 import { useParams } from 'react-router-dom'
+import s from './index.module.scss'
 import { BlockPost } from '../../../components/BlockPost'
 import { LinkButton } from '../../../components/Button'
+import { Comment } from '../../../components/Comment'
+import { CommentsList } from '../../../components/CommentList'
 import { DisLikeButton } from '../../../components/DisLikeButton'
 import { LikeButton } from '../../../components/LikesButton'
 import { Segment } from '../../../components/Segment'
 import { wrapperPage } from '../../../lib/pageWrapper'
 import { getEditPostRoute, type ViewPostRouteParams } from '../../../lib/routes'
 import { trpc } from '../../../lib/trpc'
-import s from './index.module.scss'
-import { Comment } from '../../../components/Comment'
-import { CommentsList } from '../../../components/CommentList'
 
 export const ViewPostPage = wrapperPage({
   useQuery: () => {

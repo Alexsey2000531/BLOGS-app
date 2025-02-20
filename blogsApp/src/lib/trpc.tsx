@@ -1,12 +1,13 @@
 import type { TrpcRouter } from '@BLOGS/backend/src/router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { httpBatchLink } from '@trpc/client'
-import { createTRPCReact } from '@trpc/react-query'
+import { createTRPCReact, type CreateTRPCReact } from '@trpc/react-query'
 import Cookies from 'js-cookie'
+import React from 'react'
 import superjson from 'superjson'
 import { env } from './env'
 
-export const trpc = createTRPCReact<TrpcRouter>()
+export const trpc: CreateTRPCReact<TrpcRouter, unknown, null> = createTRPCReact<TrpcRouter>()
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -1,5 +1,6 @@
 import { createRef } from 'react'
 import { Link, Outlet } from 'react-router-dom'
+import s from './index.module.scss'
 import Logo from '../../assets/images/logo.svg?react'
 import { useMe } from '../../lib/ctx'
 import {
@@ -10,8 +11,8 @@ import {
   signUpRoute,
   updateProfileRoute,
 } from '../../lib/routes'
-import s from './index.module.scss'
 
+// eslint-disable-next-line no-undef
 export const layoutContentElRef = createRef<HTMLDivElement>()
 
 export const Layout = () => {

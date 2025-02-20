@@ -1,7 +1,8 @@
 import type { TrpcRouterOutput } from '@BLOGS/backend/src/router'
 import { createContext, useContext } from 'react'
-import { Loader } from '../components/Loader'
+import React from 'react'
 import { trpc } from './trpc'
+import { Loader } from '../components/Loader'
 
 export type AppContext = {
   me: TrpcRouterOutput['getMe']['me']

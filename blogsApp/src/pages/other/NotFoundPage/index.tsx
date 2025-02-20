@@ -1,6 +1,6 @@
+import s from './index.module.scss'
 import notFoundImage from '../../../assets/images/404.png'
 import { ErrorPageComponent } from '../../../components/ErrorPageComponent'
-import s from './index.module.scss'
 
 export const NotFoundPage = ({
   title = 'Страница не найдена!',

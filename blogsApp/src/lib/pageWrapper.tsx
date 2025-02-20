@@ -2,11 +2,11 @@ import { type UseTRPCQueryResult, type UseTRPCQuerySuccessResult } from '@trpc/r
 import React, { useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useNavigate } from 'react-router-dom'
+import { useAppContext, type AppContext } from './ctx'
+import { getAllPostsRoute } from './routes'
 import { ErrorPageComponent } from '../components/ErrorPageComponent/index'
 import { Loader } from '../components/Loader'
 import { NotFoundPage } from '../pages/other/NotFoundPage'
-import { useAppContext, type AppContext } from './ctx'
-import { getAllPostsRoute } from './routes'
 
 class CheckExistsError extends Error {}
 const checkExistsFn = <T,>(value: T, message?: string): NonNullable<T> => {

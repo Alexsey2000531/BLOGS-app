@@ -15,7 +15,6 @@ import { getPostsTrpcRoute } from './posts/getPosts'
 import { setDisLikePostTrpcRoute } from './posts/setDisLikePost'
 import { setLikePostTrpcRoute } from './posts/setLikePost'
 import { zCreateCommentsTrpcRoute } from './posts/createComments'
-import { zDeleteCommentsTrpcRoute } from './posts/deleteComments'
 // @endindex
 
 export const trpcRouter = trpc.router({
@@ -32,7 +31,6 @@ export const trpcRouter = trpc.router({
   setDisLikePost: setDisLikePostTrpcRoute,
   blockPost: blockedPostTrpcRoute,
   addComments: zCreateCommentsTrpcRoute,
-  deleteCommnets: zDeleteCommentsTrpcRoute,
 })
 
 export type TrpcRouter = typeof trpcRouter
