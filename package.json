@@ -1,6 +1,7 @@
 {
   "name": "BLOGS",
   "private": true,
+  "type": "module",
   "version": "0.0.0",
   "scripts": {
     "b": "pnpm --filter @BLOGS/backend",

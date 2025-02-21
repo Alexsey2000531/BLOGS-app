@@ -4,7 +4,7 @@
   "type": "module",
   "version": "0.0.0",
   "scripts": {
-    "dev": "ts-node-dev --watch ./src/emails/dist,./.env --rs --exit-child ./src/index.ts",
+    "dev": "nodemon -I --exec node --experimental-specifier-resolution=node --watch ./src/emails/dist,./.env --loader ts-node/esm ./src/index.ts",
     "build-emails": "if exist .\\src\\emails\\dist rmdir /s /q .\\src\\emails\\dist && mkdir .\\src\\emails\\dist && mjml .\\src\\emails\\[!_]*.mjml -o .\\src\\emails\\dist",
     "watch-emails": "mjml -w ./src/emails/[!_]*.mjml -o ./src/emails/dist",
     "copy-emails": "copyfiles -u 1 ./src/emails/dist/*.html ./dist",
@@ -26,16 +26,20 @@
     "@trpc/server": "^10.45.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
+    "eslint": "9.20.1",
     "express": "^4.21.2",
     "fast-glob": "^3.3.3",
     "handlebars": "^4.7.8",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mjml": "^4.14.1",
+    "nodemon": "^3.1.9",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "superjson": "1.13.3",
     "trpc-playground": "^1.0.4",
+    "ts-node": "^10.9.2",
+    "typescript": "5.7.3",
     "zod": "^3.24.1"
   },
   "devDependencies": {
@@ -48,6 +52,7 @@
     "@types/passport-jwt": "^4.0.1",
     "@typescript-eslint/parser": "^8.24.1",
     "eslint-plugin-node": "^11.1.0",
-    "prisma": "^6.2.1"
+    "prisma": "^6.2.1",
+    "ts-node-dev": "^2.0.0"
   }
 }

@@ -37,6 +37,7 @@ export const useForm = <TZodSchema extends z.ZodTypeAny>({
           formik.resetForm()
         }
         setSuccessMessageVisible(true)
+        // eslint-disable-next-line no-undef
         setTimeout(() => {
           setSuccessMessageVisible(false)
         }, 3000)
