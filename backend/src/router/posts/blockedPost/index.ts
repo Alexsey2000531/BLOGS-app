@@ -1,4 +1,3 @@
-import { sendPostBlockedEmail } from '../../../lib/emails'
 import { trpc } from '../../../lib/trpc'
 import { canBlockedPost } from '../../../utils/canBlockedPost'
 import { zBlockedPostInput } from './input'
@@ -31,8 +30,6 @@ export const blockedPostTrpcRoute = trpc.procedure.input(zBlockedPostInput).muta
       blockedAt: new Date(),
     },
   })
-
-  void sendPostBlockedEmail({ user: post.author, post })
 
   return true
 })
