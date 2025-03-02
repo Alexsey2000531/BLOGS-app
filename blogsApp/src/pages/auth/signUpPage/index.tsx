@@ -55,7 +55,7 @@ export const SignUpPage = wrapperPage({
         <Input name="password" label="Пароль" type="password" formik={formik} />
         <Input name="passwordAgain" label="Повторите пароль" type="password" formik={formik} />
         <Alert {...alertProps} />
-        <Button color="blue" {...buttonProps}>
+        <Button color="green" {...buttonProps}>
           Зарегистрироваться!
         </Button>
         <Link className={s.link} to={signInRoute()}>
