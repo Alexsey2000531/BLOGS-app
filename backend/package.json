@@ -4,7 +4,7 @@
   "type": "module",
   "version": "0.0.0",
   "scripts": {
-    "dev": "nodemon -I --exec node --experimental-specifier-resolution=node ./.env --loader ts-node/esm ./src/index.ts",
+    "dev": "nodemon -I --exec node --experimental-specifier-resolution=node --loader ts-node/esm ./src/index.ts",
     "build-ts": "rimraf ./dist && tsc --build ./tsconfig.json",
     "build": "pnpm build-ts",
     "start": "node ./dist/index.js",

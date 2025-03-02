@@ -1,0 +1,34 @@
+.form {
+  position: absolute;
+  width: 340px;
+  height: 470px;
+  left: 470px;
+  top: 105px;
+  padding: 50px 30px 30px 30px;
+
+  border-radius: 12px;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.14);
+  background: rgb(255, 255, 255);
+}
+
+.title {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0%;
+  text-align: center;
+  color: rgb(30, 30, 30);
+  margin-bottom: 40px;
+}
+
+.link {
+  display: block;
+  text-align: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 11px;
+  letter-spacing: 0;
+  color: rgb(51, 105, 243);
+}

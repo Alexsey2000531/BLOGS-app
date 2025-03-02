@@ -3,8 +3,9 @@
 @use '../../styles/vars' as *;
 
 .button {
-  padding: 8px 15px;
-  margin-bottom: -5px;
+  width: 100%;
+  padding: 12px 70px;
+  margin-bottom: 14px;
   color: $white;
   border: none;
   font-weight: bold;
@@ -42,6 +43,18 @@
 
     &:active {
       background-color: color.scale($red, $lightness: 30%);
+    }
+  }
+
+  &.color-blue {
+    background-color: rgb(51, 105, 243);
+
+    &:hover {
+      background-color: color.scale($blue, $lightness: 10%);
+    }
+
+    &:active {
+      background-color: color.scale($blue, $lightness: 30%);
     }
   }
 

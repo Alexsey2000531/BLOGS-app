@@ -1,14 +1,16 @@
 import { zSignUpTrpcInput } from '@BLOGS/backend/src/router/auth/signUp/input'
 import Cookies from 'js-cookie'
 
+import { Link } from 'react-router-dom'
 import { z } from 'zod'
+import s from './index.module.scss'
 import { Alert } from '../../../components/Alert'
 import { Button } from '../../../components/Button'
 import { FormItems } from '../../../components/FormItems'
 import { Input } from '../../../components/Input'
-import { Segment } from '../../../components/Segment'
 import { useForm } from '../../../lib/form'
 import { wrapperPage } from '../../../lib/pageWrapper'
+import { signInRoute } from '../../../lib/routes'
 import { trpc } from '../../../lib/trpc'
 
 export const SignUpPage = wrapperPage({
@@ -45,19 +47,21 @@ export const SignUpPage = wrapperPage({
     resetOnSuccess: false,
   })
   return (
-    <Segment title="Зарегистрироваться">
-      <form onSubmit={formik.handleSubmit}>
-        <FormItems>
-          <Input name="nick" label="Никнейм" formik={formik} />
-          <Input name="email" label="E-mail" formik={formik} />
-          <Input name="password" label="Пароль" type="password" formik={formik} />
-          <Input name="passwordAgain" label="Повторите пароль" type="password" formik={formik} />
-          <Alert {...alertProps} />
-          <Button color="green" {...buttonProps}>
-            Зарегистрироваться!
-          </Button>
-        </FormItems>
-      </form>
-    </Segment>
+    <form className={s.form} onSubmit={formik.handleSubmit}>
+      <h1 className={s.title}>Регистрация</h1>
+      <FormItems>
+        <Input name="nick" label="Никнейм" formik={formik} />
+        <Input name="email" label="E-mail" formik={formik} />
+        <Input name="password" label="Пароль" type="password" formik={formik} />
+        <Input name="passwordAgain" label="Повторите пароль" type="password" formik={formik} />
+        <Alert {...alertProps} />
+        <Button color="blue" {...buttonProps}>
+          Зарегистрироваться!
+        </Button>
+        <Link className={s.link} to={signInRoute()}>
+          Войти
+        </Link>
+      </FormItems>
+    </form>
   )
 })

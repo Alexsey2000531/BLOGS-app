@@ -48,7 +48,6 @@ export const ViewPostPage = wrapperPage({
                 <LikeButton post={post} />
               </>
             )}
-            {post.likeCount}
             {!me && <p>Лайков: {post.likeCount}</p>}
           </div>
           <div className={s.disLikes}>
@@ -58,7 +57,6 @@ export const ViewPostPage = wrapperPage({
                 <DisLikeButton post={post} />
               </>
             )}
-            {post.disLikeCount}
             {!me && <p>Дизлайков: {post.disLikeCount}</p>}
           </div>
         </div>
