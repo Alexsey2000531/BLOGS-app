@@ -6,13 +6,11 @@ import { useMe } from '../../lib/ctx'
 import {
   getAllPostsRoute,
   getCreatePostRoute,
-  signInRoute,
-  signOutRoute,
-  signUpRoute,
-  updateProfileRoute,
+  getSignOutRoute,
+  getSignUpRoute,
+  getUpdateProfileRoute,
 } from '../../lib/routes'
 
-// eslint-disable-next-line no-undef
 export const layoutContentElRef = createRef<HTMLDivElement>()
 
 export const Layout = () => {
@@ -35,12 +33,12 @@ export const Layout = () => {
                 </Link>
               </li>
               <li className={s.item}>
-                <Link className={s.link} to={updateProfileRoute()}>
+                <Link className={s.link} to={getUpdateProfileRoute()}>
                   Мой профиль
                 </Link>
               </li>
               <li className={s.item}>
-                <Link className={s.link} to={signOutRoute()}>
+                <Link className={s.link} to={getSignOutRoute()}>
                   Выйти ({me.nick})
                 </Link>
               </li>
@@ -48,12 +46,12 @@ export const Layout = () => {
           ) : (
             <>
               <li className={s.item}>
-                <Link className={s.link} to={signInRoute()}>
+                <Link className={s.link} to={getSignOutRoute()}>
                   Войти
                 </Link>
               </li>
               <li className={s.item}>
-                <Link className={s.link} to={signUpRoute()}>
+                <Link className={s.link} to={getSignUpRoute()}>
                   Регистрация
                 </Link>
               </li>

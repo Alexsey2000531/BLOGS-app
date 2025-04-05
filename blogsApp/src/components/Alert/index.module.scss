@@ -2,6 +2,7 @@
 @use '../../styles/vars' as *;
 
 .alert {
+  width: 270px;
   padding: 10px;
   border-radius: $borderRaduisSmall;
   margin-bottom: 10px;

@@ -1,23 +1,16 @@
-const getRouteParams = <T extends Record<string, boolean>>(object: T) => {
-  return Object.keys(object).reduce((acc, key) => ({ ...acc, [key]: `:${key}` }), {}) as Record<keyof T, string>
-}
+import { gtr } from '../utils/getRoutes'
 
-export const getAllPostsRoute = () => '/'
+export const getAllPostsRoute = gtr(() => '/')
 
-export const viewPostRouteParams = getRouteParams({ postNick: true })
-export type ViewPostRouteParams = typeof viewPostRouteParams
-export const getViewPostRoute = ({ postNick }: ViewPostRouteParams) => `/posts/${postNick}`
+export const getViewPostRoute = gtr({ postNick: true }, ({ postNick }) => `/posts/${postNick}`)
+export const getEditPostRoute = gtr({ postNick: true }, ({ postNick }) => `/posts/${postNick}/edit`)
 
-export const editPostRouteParams = getRouteParams({ postNick: true })
-export type EditPostRouteParams = typeof editPostRouteParams
-export const getEditPostRoute = ({ postNick }: EditPostRouteParams) => `/posts/${postNick}/edit`
+export const getCreatePostRoute = gtr(() => '/posts/new')
 
-export const getCreatePostRoute = () => '/posts/new'
+export const getUpdateProfileRoute = gtr(() => '/update-profile')
 
-export const updateProfileRoute = () => '/update-profile'
+export const getSignUpRoute = gtr(() => '/sign-up')
 
-export const signUpRoute = () => '/sign-up'
+export const getSignInRoute = gtr(() => '/sign-in')
 
-export const signInRoute = () => '/sign-in'
-
-export const signOutRoute = () => '/sign-out'
+export const getSignOutRoute = gtr(() => '/sign-out')

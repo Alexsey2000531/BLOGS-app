@@ -4,14 +4,28 @@ import { Link } from 'react-router-dom'
 import s from './index.module.scss'
 
 type ButtonColor = 'red' | 'green' | 'blue'
-export type ButtonProps = { children: React.ReactNode; loading?: boolean; color?: ButtonColor }
+export type ButtonProps = {
+  type?: 'submit' | 'button'
+  children: React.ReactNode
+  loading?: boolean
+  color?: ButtonColor
+  onClick?: () => void
+  disabled?: boolean
+}
 
-export const Button = ({ children, loading = false, color }: ButtonProps) => {
+export const Button = ({ type = 'submit', children, loading = false, color, onClick, disabled }: ButtonProps) => {
   return (
     <button
-      className={cn({ [s.button]: true, [s.disabled]: loading, [s.loading]: loading, [s[`color-${color}`]]: true })}
-      type="submit"
-      disabled={loading}
+      className={cn({
+        [s.button]: true,
+        [s.disabled]: disabled || loading,
+        [s.disabled]: loading,
+        [s.loading]: loading,
+        [s[`color-${color}`]]: true,
+      })}
+      type={type}
+      disabled={disabled || loading}
+      onClick={onClick}
     >
       <span className={s.text}>{children}</span>
     </button>
@@ -32,4 +46,8 @@ export const LinkButton = ({
       {children}
     </Link>
   )
+}
+
+export const Buttons = ({ children }: { children: React.ReactNode }) => {
+  return <div className={s.buttons}>{children}</div>
 }

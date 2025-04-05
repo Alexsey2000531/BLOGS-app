@@ -18,6 +18,7 @@ export const useForm = <TZodSchema extends z.ZodTypeAny>({
   showValidationAlert?: boolean
   initialValues?: z.infer<TZodSchema>
   validationSchema?: TZodSchema
+  // eslint-disable-next-line no-unused-vars
   onSubmit?: (values: z.infer<TZodSchema>, actions: FormikHelpers<z.infer<TZodSchema>>) => Promise<any> | any
 }) => {
   const [successMessageVisible, setSuccessMessageVisible] = useState(false)
@@ -34,7 +35,7 @@ export const useForm = <TZodSchema extends z.ZodTypeAny>({
         setSubmittingError(null)
         await onSubmit(values, formikHelpers)
         if (resetOnSuccess) {
-          formik.resetForm()
+          formikHelpers.resetForm()
         }
         setSuccessMessageVisible(true)
         // eslint-disable-next-line no-undef

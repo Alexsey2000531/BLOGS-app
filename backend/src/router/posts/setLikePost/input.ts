@@ -1,6 +1,7 @@
 import { z } from 'zod'
+import { zStringRequired } from '@BLOGS/shared/src/zod'
 
 export const zSetLikePostInput = z.object({
-  postId: z.string().min(1),
+  postId: zStringRequired,
   isLikedByMe: z.boolean(),
 })

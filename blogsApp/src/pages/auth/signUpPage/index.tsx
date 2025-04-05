@@ -1,8 +1,7 @@
 import { zSignUpTrpcInput } from '@BLOGS/backend/src/router/auth/signUp/input'
+import { zPasswordsMustBeTheSame, zStringRequired } from '@BLOGS/shared/src/zod'
 import Cookies from 'js-cookie'
-
 import { Link } from 'react-router-dom'
-import { z } from 'zod'
 import s from './index.module.scss'
 import { Alert } from '../../../components/Alert'
 import { Button } from '../../../components/Button'
@@ -10,7 +9,7 @@ import { FormItems } from '../../../components/FormItems'
 import { Input } from '../../../components/Input'
 import { useForm } from '../../../lib/form'
 import { wrapperPage } from '../../../lib/pageWrapper'
-import { signInRoute } from '../../../lib/routes'
+import { getSignInRoute } from '../../../lib/routes'
 import { trpc } from '../../../lib/trpc'
 
 export const SignUpPage = wrapperPage({
@@ -28,17 +27,9 @@ export const SignUpPage = wrapperPage({
     },
     validationSchema: zSignUpTrpcInput
       .extend({
-        passwordAgain: z.string().min(8),
+        passwordAgain: zStringRequired,
       })
-      .superRefine((val, ctx) => {
-        if (val.password !== val.passwordAgain) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: 'Пароли должны быть одинаковыми!',
-            path: ['passwordAgain'],
-          })
-        }
-      }),
+      .superRefine(zPasswordsMustBeTheSame('password', 'passwordAgain')),
     onSubmit: async (values) => {
       const { token } = await signUp.mutateAsync(values)
       Cookies.set('token', token, { expires: 99999 })
@@ -58,7 +49,7 @@ export const SignUpPage = wrapperPage({
         <Button color="green" {...buttonProps}>
           Зарегистрироваться!
         </Button>
-        <Link className={s.link} to={signInRoute()}>
+        <Link className={s.link} to={getSignInRoute()}>
           Войти
         </Link>
       </FormItems>

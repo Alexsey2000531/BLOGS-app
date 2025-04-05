@@ -1,5 +1,6 @@
 import { z } from 'zod'
+import { zStringRequired } from '@BLOGS/shared/src/zod'
 
 export const zBlockedPostInput = z.object({
-  postId: z.string().min(1),
+  postId: zStringRequired,
 })

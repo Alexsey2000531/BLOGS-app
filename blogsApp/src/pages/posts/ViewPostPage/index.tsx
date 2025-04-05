@@ -1,8 +1,7 @@
-import { canBlockedPost, canEditPost } from '@BLOGS/backend/src/utils/canBlockedPost'
+import { canEditPost } from '@BLOGS/backend/src/utils/canBlockedPost'
+import { getS3UploadName, getS3UploadUrl } from '@BLOGS/shared/src/s3'
 import { format } from 'date-fns'
-import { useParams } from 'react-router-dom'
 import s from './index.module.scss'
-import { BlockPost } from '../../../components/BlockPost'
 import { LinkButton } from '../../../components/Button'
 import { Comment } from '../../../components/Comment'
 import { CommentsList } from '../../../components/CommentList'
@@ -10,12 +9,12 @@ import { DisLikeButton } from '../../../components/DisLikeButton'
 import { LikeButton } from '../../../components/LikesButton'
 import { Segment } from '../../../components/Segment'
 import { wrapperPage } from '../../../lib/pageWrapper'
-import { getEditPostRoute, type ViewPostRouteParams } from '../../../lib/routes'
+import { getEditPostRoute, getViewPostRoute } from '../../../lib/routes'
 import { trpc } from '../../../lib/trpc'
 
 export const ViewPostPage = wrapperPage({
   useQuery: () => {
-    const { postNick } = useParams() as ViewPostRouteParams
+    const { postNick } = getViewPostRoute.useParams()
     return trpc.getPost.useQuery({
       postNick,
     })
@@ -37,6 +36,14 @@ export const ViewPostPage = wrapperPage({
         </div>
         <div className={s.date}>Дата публикации: {format(post.createdAt, 'dd.MM.yyyy')}</div>
       </div>
+      {post.certificate && (
+        <div className={s.certificate}>
+          Certificate:{' '}
+          <a className={s.certificateLink} target="_blank" href={getS3UploadUrl(post.certificate)}>
+            {getS3UploadName(post.certificate)}
+          </a>
+        </div>
+      )}
       <CommentsList postNick={post.nick} />
       <div className={s.postInfo}>
         <div className={s.formComments}>{me && <Comment postId={post.id} authorId={me.id} />}</div>
@@ -48,7 +55,7 @@ export const ViewPostPage = wrapperPage({
                 <LikeButton post={post} />
               </>
             )}
-            {!me && <p>Лайков: {post.likeCount}</p>}
+            <p>Лайков: {post.likeCount}</p>
           </div>
           <div className={s.disLikes}>
             {me && (
@@ -57,20 +64,15 @@ export const ViewPostPage = wrapperPage({
                 <DisLikeButton post={post} />
               </>
             )}
-            {!me && <p>Дизлайков: {post.disLikeCount}</p>}
+            <p>Дизлайков: {post.disLikeCount}</p>
           </div>
         </div>
-        {canEditPost(me, post) && (
-          <div>
-            <LinkButton to={getEditPostRoute({ postNick: post.nick })}>Редактировать пост</LinkButton>
-          </div>
-        )}
-        {canBlockedPost(me) && (
-          <div className={s.blocksPost}>
-            <BlockPost post={post} />
-          </div>
-        )}
       </div>
+      {canEditPost(me, post) && (
+        <div className={s.editPost}>
+          <LinkButton to={getEditPostRoute({ postNick: post.nick })}>Редактировать пост</LinkButton>
+        </div>
+      )}
     </Segment>
   )
 })

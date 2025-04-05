@@ -5,7 +5,7 @@ import { createTRPCReact, type CreateTRPCReact } from '@trpc/react-query'
 import Cookies from 'js-cookie'
 import React from 'react'
 import superjson from 'superjson'
-import { env } from './env'
+import { env } from './env.ts'
 
 export const trpc: CreateTRPCReact<TrpcRouter, unknown, null> = createTRPCReact<TrpcRouter>()
 

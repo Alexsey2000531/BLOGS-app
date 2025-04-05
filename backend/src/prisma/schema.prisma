@@ -14,6 +14,8 @@ model Post {
       name         String
       description  String
       text         String
+      images       String[]
+      certificate  String?
       serialNumber Int        @unique @default(autoincrement())
       createdAt    DateTime   @default(now())
       authorId     String
@@ -30,6 +32,8 @@ model User {
       name        String           @default("")
       email       String           @unique
       password    String
+      avatar      String?
+      images       String[]
       createdAt   DateTime         @default(now())
       posts       Post[]
       Like        Like[]

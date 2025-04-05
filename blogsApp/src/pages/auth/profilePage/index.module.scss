@@ -1,0 +1,57 @@
+form .avatar {
+  margin: 20px auto;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 130px;
+  height: 130px;
+  background: rgb(239, 239, 239);
+  border-radius: 50%;
+}
+
+.logo {
+  width: 40px;
+}
+
+.userName {
+  display: block;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.button {
+  display: block;
+  margin: auto;
+  width: 270px;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.link {
+  width: 270px;
+  padding: 12px 70px;
+  margin: auto;
+  text-align: center;
+  color: white;
+  border: none;
+  font-weight: bold;
+  border-radius: 6px;
+  background-color: red;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}

@@ -30,7 +30,7 @@
 .content_info {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 20px;
 }
 
 .likes {
@@ -55,4 +55,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.editPost {
+  margin-top: 50px;
 }

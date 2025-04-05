@@ -22,15 +22,15 @@ export const App = () => {
         <AppContextProvider>
           <BrowserRouter>
             <Routes>
-              <Route path={router.signOutRoute()} element={<SignOutPage />} />
+              <Route path={router.getSignOutRoute.definition} element={<SignOutPage />} />
               <Route element={<Layout />}>
-                <Route path={router.getAllPostsRoute()} element={<AllPostsPage />} />
-                <Route path={router.getCreatePostRoute()} element={<CreatePostPage />} />
-                <Route path={router.getViewPostRoute(router.viewPostRouteParams)} element={<ViewPostPage />} />
-                <Route path={router.getEditPostRoute(router.editPostRouteParams)} element={<EditPostPage />} />
-                <Route path={router.updateProfileRoute()} element={<ProfilePage />} />
-                <Route path={router.signInRoute()} element={<SignInPage />} />
-                <Route path={router.signUpRoute()} element={<SignUpPage />} />
+                <Route path={router.getAllPostsRoute.definition} element={<AllPostsPage />} />
+                <Route path={router.getCreatePostRoute.definition} element={<CreatePostPage />} />
+                <Route path={router.getViewPostRoute.definition} element={<ViewPostPage />} />
+                <Route path={router.getEditPostRoute.definition} element={<EditPostPage />} />
+                <Route path={router.getUpdateProfileRoute.definition} element={<ProfilePage />} />
+                <Route path={router.getSignInRoute.definition} element={<SignInPage />} />
+                <Route path={router.getSignUpRoute.definition} element={<SignUpPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Route>
             </Routes>

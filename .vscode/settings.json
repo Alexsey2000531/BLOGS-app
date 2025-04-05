@@ -1,3 +1,4 @@
 {
-  "eslint.workingDirectories": ["backend", "blogsApp"]
+  "eslint.workingDirectories": ["backend", "blogsApp", "shared"],
+  "cSpell.words": ["presigner"]
 }

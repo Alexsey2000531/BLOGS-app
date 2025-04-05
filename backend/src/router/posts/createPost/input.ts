@@ -1,11 +1,10 @@
 import { z } from 'zod'
+import { zNickRequired, zStringMin, zStringRequired } from '@BLOGS/shared/src/zod'
 
 export const zCreatePostTrpcInput = z.object({
-  name: z.string().min(3, 'Минимальное кол-во символов 3').max(100, 'Макисмальное кол-во символов 3'),
-  nick: z
-    .string()
-    .min(3, 'Минимальное кол-во символов 3')
-    .regex(/^[a-z0-9-]+$/, 'Никнейм может содержать только строчные буквы, цифры и тире!'),
-  description: z.string().min(5, 'Минимальное кол-во символов 5').max(100, 'Макисмальное кол-во символов 100'),
-  text: z.string().min(100, 'Текст должен быть не менее 100 символов!'),
+  name: zStringRequired,
+  nick: zNickRequired,
+  description: zStringMin(5).max(100, 'Максимальное кол-во символов 100'),
+  text: zStringMin(100),
+  certificate: z.string().nullable()
 })

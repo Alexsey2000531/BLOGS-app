@@ -8,7 +8,7 @@ import { FormItems } from '../../../components/FormItems'
 import { Input } from '../../../components/Input'
 import { useForm } from '../../../lib/form'
 import { wrapperPage } from '../../../lib/pageWrapper'
-import { signUpRoute } from '../../../lib/routes'
+import { getSignUpRoute } from '../../../lib/routes'
 import { trpc } from '../../../lib/trpc'
 
 export const SignInPage = wrapperPage({
@@ -43,7 +43,7 @@ export const SignInPage = wrapperPage({
         <Button color="blue" {...buttonProps}>
           Авторизироваться
         </Button>
-        <Link className={s.link} to={signUpRoute()}>
+        <Link className={s.link} to={getSignUpRoute()}>
           Нет аккаунта?
         </Link>
       </FormItems>

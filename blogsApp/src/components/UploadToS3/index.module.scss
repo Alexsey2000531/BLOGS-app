@@ -1,0 +1,11 @@
+@use '../Input/index.module.scss' as *;
+
+.field {
+  input {
+    display: none;
+  }
+
+  .uploads {
+    margin-bottom: 5px;
+  }
+}
