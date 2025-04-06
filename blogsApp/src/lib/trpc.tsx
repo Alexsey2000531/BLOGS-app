@@ -1,11 +1,13 @@
 import type { TrpcRouter } from '@BLOGS/backend/src/router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { httpBatchLink } from '@trpc/client'
+import { httpBatchLink, loggerLink, TRPCLink } from '@trpc/client'
 import { createTRPCReact, type CreateTRPCReact } from '@trpc/react-query'
+import { observable } from '@trpc/server/observable'
 import Cookies from 'js-cookie'
 import React from 'react'
 import superjson from 'superjson'
 import { env } from './env.ts'
+import { sentryCaptureException } from './sentry.tsx'
 
 export const trpc: CreateTRPCReact<TrpcRouter, unknown, null> = createTRPCReact<TrpcRouter>()
 
@@ -18,9 +20,37 @@ const queryClient = new QueryClient({
   },
 })
 
+const customTrpcLink: TRPCLink<TrpcRouter> = () => {
+  return ({ next, op }) => {
+    return observable((observer) => {
+      const unscribe = next(op).subscribe({
+        next(value) {
+          observer.next(value)
+        },
+        error(error) {
+          if (env.NODE_ENV === 'development') {
+            // eslint-disable-next-line no-undef, no-console
+            console.error(error)
+          }
+          sentryCaptureException(error)
+          observer.error(error)
+        },
+        complete() {
+          observer.complete()
+        },
+      })
+      return unscribe
+    })
+  }
+}
+
 const trpcClient = trpc.createClient({
   transformer: superjson,
   links: [
+    customTrpcLink,
+    loggerLink({
+      enabled: () => env.NODE_ENV === 'development',
+    }),
     httpBatchLink({
       url: env.VITE_TRPC_URL,
       headers: () => {

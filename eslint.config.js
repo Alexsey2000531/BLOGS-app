@@ -49,12 +49,6 @@ export default [
           skipStrings: true,
         },
       ],
-      'no-console': [
-        'warn',
-        {
-          allow: ['info', 'error', 'warn'],
-        },
-      ],
       'node/no-process-env': 'error',
       'no-restricted-syntax': [
         'error',

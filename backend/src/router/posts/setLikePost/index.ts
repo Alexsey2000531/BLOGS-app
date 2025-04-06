@@ -1,7 +1,7 @@
-import { trpc } from '../../../lib/trpc'
+import { trpcLoggedProcedure } from '../../../lib/trpc'
 import { zSetLikePostInput } from './input'
 
-export const setLikePostTrpcRoute = trpc.procedure.input(zSetLikePostInput).mutation(async ({ input, ctx }) => {
+export const setLikePostTrpcRoute = trpcLoggedProcedure.input(zSetLikePostInput).mutation(async ({ input, ctx }) => {
   const { postId, isLikedByMe } = input
   if (!ctx.me) {
     throw new Error('Не авторизован!')

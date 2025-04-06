@@ -64,7 +64,7 @@ export default [
       'react/react-in-jsx-scope': 'off',
       curly: ['error', 'all'],
       'no-irregular-whitespace': ['error', { skipTemplates: true, skipStrings: true }],
-      'no-console': ['error', { allow: ['info', 'error', 'warn'] }],
+      'no-console': 'error',
       '@typescript-eslint/strict-boolean-expressions': 'off',
       '@typescript-eslint/prefer-nullish-coalescing': 'off',
       '@typescript-eslint/restrict-template-expressions': 'off',

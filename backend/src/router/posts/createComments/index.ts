@@ -1,7 +1,7 @@
-import { trpc } from '../../../lib/trpc'
+import { trpcLoggedProcedure } from '../../../lib/trpc'
 import { zCreateCommentsTrpcInput } from './input'
 
-export const zCreateCommentsTrpcRoute = trpc.procedure
+export const zCreateCommentsTrpcRoute = trpcLoggedProcedure
   .input(zCreateCommentsTrpcInput)
   .mutation(async ({ ctx, input }) => {
     const { postId, authorId, content } = input

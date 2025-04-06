@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
   // eslint-disable-next-line no-undef
   const env = loadEnv(mode, process.cwd(), '')
   const publicEnv = Object.entries(env).reduce((acc, [key, value]) => {
-    if (key.startsWith('VITE_')) {
+    if (key.startsWith('VITE_') || ['NODE_ENV', 'HOST_ENV'].includes(key)) {
       return {
         ...acc,
         [key]: value,

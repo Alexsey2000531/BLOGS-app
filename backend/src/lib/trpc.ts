@@ -7,7 +7,7 @@ import { type TrpcRouter } from '../router'
 import { type ExpressRequest } from '../utils/types'
 import { type AppContext } from './ctx'
 import { ExpectedError } from './error'
-
+import { logger } from './logger'
 
 export const getTrpcContext = ({ appContext, req }: { appContext: AppContext; req: ExpressRequest }) => ({
   ...appContext,
@@ -50,9 +50,13 @@ export const trpcLoggedProcedure = trpc.procedure.use(
       rawInput: rawInput || null,
     }
     if (result.ok) {
-      console.info(`trpc:${type}:success`, 'Successfull request', { ...meta, output: result.data })
+      logger.info({
+        logType: `trpc:${type}:success`,
+        message: 'Successful request',
+        meta: { ...meta, output: result.data },
+      })
     } else {
-      console.error(`trpc:${type}:error`, result.error, meta)
+      logger.error({ logType: `trpc:${type}:error`, error: result.error, meta: meta })
     }
     return result
   })

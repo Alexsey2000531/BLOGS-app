@@ -33,12 +33,7 @@ export default [
           skipStrings: true,
         },
       ],
-      'no-console': [
-        'warn',
-        {
-          allow: ['info', 'error', 'warn'],
-        },
-      ],
+      'no-console': 'error',
       'no-undef': ['warn'],
     },
   },

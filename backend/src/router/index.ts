@@ -1,5 +1,5 @@
 import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server'
-import { trpc } from '../lib/trpc'
+import { createTrpcRouter } from '../lib/trpc'
 import { getMeTrpcRoute } from './auth/getMe'
 import { signInTrpcRoute } from './auth/signIn'
 import { signUpTrpcRoute } from './auth/signUp'
@@ -19,7 +19,7 @@ import { prepareS3UploadTrpcRoute } from './upload/prepareCloudflareUpload'
 import { updateFileUrlTrpcRoute } from './auth/updateFileUrl'
 // @endindex
 
-export const trpcRouter = trpc.router({
+export const trpcRouter = createTrpcRouter({
   getPosts: getPostsTrpcRoute,
   getPost: getPostTrpcRoute,
   EditPost: getEditPostTrpcRoute,
@@ -34,7 +34,7 @@ export const trpcRouter = trpc.router({
   blockPost: blockedPostTrpcRoute,
   addComments: zCreateCommentsTrpcRoute,
   prepareS3Upload: prepareS3UploadTrpcRoute,
-  updateFile: updateFileUrlTrpcRoute
+  updateFile: updateFileUrlTrpcRoute,
 })
 
 export type TrpcRouter = typeof trpcRouter

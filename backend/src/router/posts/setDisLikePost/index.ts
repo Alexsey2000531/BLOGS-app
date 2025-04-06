@@ -1,77 +1,79 @@
-import { trpc } from '../../../lib/trpc'
+import { trpcLoggedProcedure } from '../../../lib/trpc'
 import { zSetDisLikePostInput } from './input'
 
-export const setDisLikePostTrpcRoute = trpc.procedure.input(zSetDisLikePostInput).mutation(async ({ input, ctx }) => {
-  const { postId, isDisLikedByMe } = input
-  if (!ctx.me) {
-    throw new Error('Не авторизован!')
-  }
+export const setDisLikePostTrpcRoute = trpcLoggedProcedure
+  .input(zSetDisLikePostInput)
+  .mutation(async ({ input, ctx }) => {
+    const { postId, isDisLikedByMe } = input
+    if (!ctx.me) {
+      throw new Error('Не авторизован!')
+    }
 
-  const post = await ctx.prisma.post.findUnique({
-    where: {
-      id: postId,
-    },
-  })
-
-  if (!post) {
-    throw new Error('Не найдено!')
-  }
-
-  // если пользователь ставит дизлайк
-  if (zSetDisLikePostInput) {
-    // удаляем лайк, если он стоит
-    await ctx.prisma.like.deleteMany({
+    const post = await ctx.prisma.post.findUnique({
       where: {
-        postId,
-        authorId: ctx.me.id,
+        id: postId,
       },
     })
 
-    // ставим дbзлайк на пост
-    await ctx.prisma.disLike.upsert({
-      where: {
-        postId_authorId: {
+    if (!post) {
+      throw new Error('Не найдено!')
+    }
+
+    // если пользователь ставит дизлайк
+    if (zSetDisLikePostInput) {
+      // удаляем лайк, если он стоит
+      await ctx.prisma.like.deleteMany({
+        where: {
           postId,
           authorId: ctx.me.id,
         },
-      },
-      create: {
-        authorId: ctx.me.id,
+      })
+
+      // ставим дbзлайк на пост
+      await ctx.prisma.disLike.upsert({
+        where: {
+          postId_authorId: {
+            postId,
+            authorId: ctx.me.id,
+          },
+        },
+        create: {
+          authorId: ctx.me.id,
+          postId,
+        },
+        update: {},
+      })
+    } else {
+      // если пользователь убирает дизлайк, удаляем его
+      await ctx.prisma.disLike.delete({
+        where: {
+          postId_authorId: {
+            postId,
+            authorId: ctx.me.id,
+          },
+        },
+      })
+    }
+
+    // получаем кол-во лайков и дизлайков
+    const likeCount = await ctx.prisma.like.count({
+      where: {
         postId,
       },
-      update: {},
     })
-  } else {
-    // если пользователь убирает дизлайк, удаляем его
-    await ctx.prisma.disLike.delete({
+
+    const disLikeCount = await ctx.prisma.disLike.count({
       where: {
-        postId_authorId: {
-          postId,
-          authorId: ctx.me.id,
-        },
+        postId,
       },
     })
-  }
 
-  // получаем кол-во лайков и дизлайков
-  const likeCount = await ctx.prisma.like.count({
-    where: {
-      postId,
-    },
+    return {
+      post: {
+        id: post.id,
+        likeCount,
+        disLikeCount,
+        isDisLikedByMe,
+      },
+    }
   })
-
-  const disLikeCount = await ctx.prisma.disLike.count({
-    where: {
-      postId,
-    },
-  })
-
-  return {
-    post: {
-      id: post.id,
-      likeCount,
-      disLikeCount,
-      isDisLikedByMe,
-    },
-  }
-})

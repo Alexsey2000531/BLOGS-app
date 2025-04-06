@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { AppContextProvider } from './lib/ctx'
 import * as router from './lib/routes'
+import { SentryUser } from './lib/sentry.tsx'
 import { TrpcProvider } from './lib/trpc'
 import { ProfilePage } from './pages/auth/profilePage'
 import { SignInPage } from './pages/auth/signInPage'
@@ -13,6 +14,7 @@ import { AllPostsPage } from './pages/posts/AllPostsPage'
 import { CreatePostPage } from './pages/posts/CreatePostPage'
 import { EditPostPage } from './pages/posts/EditPostPage'
 import { ViewPostPage } from './pages/posts/ViewPostPage'
+import './lib/sentry'
 import './styles/global.scss'
 
 export const App = () => {
@@ -21,6 +23,7 @@ export const App = () => {
       <TrpcProvider>
         <AppContextProvider>
           <BrowserRouter>
+            <SentryUser />
             <Routes>
               <Route path={router.getSignOutRoute.definition} element={<SignOutPage />} />
               <Route element={<Layout />}>

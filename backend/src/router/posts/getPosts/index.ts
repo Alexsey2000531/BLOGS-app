@@ -1,13 +1,13 @@
 import _ from 'lodash'
-import { trpc } from '../../../lib/trpc'
+import { trpcLoggedProcedure } from '../../../lib/trpc'
 import { zGetPostsTrpcInput } from './input'
 
-export const getPostsTrpcRoute = trpc.procedure.input(zGetPostsTrpcInput).query(async ({ ctx, input }) => {
+export const getPostsTrpcRoute = trpcLoggedProcedure.input(zGetPostsTrpcInput).query(async ({ ctx, input }) => {
   const normalizedSearch = input.search
     ? input.search
         .trim()
-        .split(/\s+/) // Разбиваем на слова
-        .map((word) => `${word}:*`) // Добавляем поддержку частичного совпадения
+        .split(/\s+/)
+        .map((word) => `${word}:*`)
         .join(' & ')
     : undefined
   const rawPosts = await ctx.prisma.post.findMany({

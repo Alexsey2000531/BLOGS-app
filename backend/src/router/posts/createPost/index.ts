@@ -1,7 +1,7 @@
-import { trpc } from '../../../lib/trpc'
+import { trpcLoggedProcedure } from '../../../lib/trpc'
 import { zCreatePostTrpcInput } from './input'
 
-export const createPostTrpcRoute = trpc.procedure.input(zCreatePostTrpcInput).mutation(async ({ ctx, input }) => {
+export const createPostTrpcRoute = trpcLoggedProcedure.input(zCreatePostTrpcInput).mutation(async ({ ctx, input }) => {
   if (!ctx.me) {
     throw Error('Не авторизирован!')
   }

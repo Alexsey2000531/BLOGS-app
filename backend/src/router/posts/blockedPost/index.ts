@@ -1,8 +1,8 @@
-import { trpc } from '../../../lib/trpc'
+import { trpcLoggedProcedure } from '../../../lib/trpc'
 import { canBlockedPost } from '../../../utils/canBlockedPost'
 import { zBlockedPostInput } from './input'
 
-export const blockedPostTrpcRoute = trpc.procedure.input(zBlockedPostInput).mutation(async ({ ctx, input }) => {
+export const blockedPostTrpcRoute = trpcLoggedProcedure.input(zBlockedPostInput).mutation(async ({ ctx, input }) => {
   const { postId } = input
 
   if (!canBlockedPost(ctx.me)) {
