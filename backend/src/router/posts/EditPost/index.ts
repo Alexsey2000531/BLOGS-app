@@ -1,3 +1,4 @@
+import { ExpectedError } from '../../../lib/error'
 import { trpcLoggedProcedure } from '../../../lib/trpc'
 import { zEditPostTrpcInput } from './input'
 
@@ -28,7 +29,7 @@ export const getEditPostTrpcRoute = trpcLoggedProcedure.input(zEditPostTrpcInput
       },
     })
     if (exPost) {
-      throw new Error('Пост с таким ником уже есть!')
+      throw new ExpectedError('Пост с таким ником уже есть!')
     }
   }
 

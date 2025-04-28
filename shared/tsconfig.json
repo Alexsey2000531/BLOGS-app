@@ -1,4 +1,14 @@
 {
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "src",
+    "paths": {
+      "@BLOGS/shared/*": ["../shared/src/*"]
+    },
+    "module": "ESNext",
+    "noEmit": true
+  },
+
   "extends": "../backend/tsconfig.json",
   "include": ["src"]
 }

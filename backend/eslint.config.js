@@ -1,6 +1,11 @@
 import js from '@eslint/js'
+import path from 'path'
 import typescriptParser from '@typescript-eslint/parser'
 import typescriptPlugin from '@typescript-eslint/eslint-plugin'
+import pluginImport from 'eslint-plugin-import'
+
+const testDir = path.resolve('./src/test')
+const srcDir = path.resolve('./src')
 
 export default [
   js.configs.recommended,
@@ -12,8 +17,16 @@ export default [
         project: './tsconfig.json',
       },
     },
+    settings: {
+      'import/resolver': {
+        node: {
+          extensions: ['.js', '.ts', '.tsx'],
+        },
+      },
+    },
     plugins: {
       '@typescript-eslint': typescriptPlugin,
+      import: pluginImport,
     },
     rules: {
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
@@ -35,6 +48,25 @@ export default [
       ],
       'no-console': 'error',
       'no-undef': ['warn'],
+    },
+  },
+
+  {
+    files: ['src/**/*.ts'],
+    ignores: ['**/*.integration.test.ts'],
+    rules: {
+      'import/no-restricted-paths': [
+        'error',
+        {
+          zones: [
+            {
+              target: srcDir,
+              from: testDir,
+              message: 'Импортировать что-либо из тестового каталога можно только внутри интеграционных тестов!',
+            },
+          ],
+        },
+      ],
     },
   },
 ]

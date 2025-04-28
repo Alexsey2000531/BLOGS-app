@@ -5,7 +5,7 @@ import { Button } from '../../../components/Button'
 import { FormItems } from '../../../components/FormItems'
 import { Input } from '../../../components/Input'
 import { Textarea } from '../../../components/Textarea'
-import { UploadToS3 } from '../../../components/UploadToS3/UploadToS3'
+import { UploadsCloudinary } from '../../../components/UploadsCloudinary'
 import { useForm } from '../../../lib/form'
 import { wrapperPage } from '../../../lib/pageWrapper'
 import { trpc } from '../../../lib/trpc'
@@ -22,6 +22,7 @@ export const CreatePostPage = wrapperPage({
       description: '',
       text: '',
       certificate: '',
+      images: [],
     },
     validationSchema: zCreatePostTrpcInput,
     onSubmit: async (values) => {
@@ -45,8 +46,8 @@ export const CreatePostPage = wrapperPage({
         <Input name="name" label="Имя" formik={formik} />
         <Input name="nick" label="Никнейм" formik={formik} />
         <Input name="description" label="Описание" formik={formik} maxWidth={500} />
+        <UploadsCloudinary label="Изображение" name="images" formik={formik} type="image" preset="preview" />
         <Textarea name="text" label="Текст" formik={formik} />
-        <UploadToS3 type="image" label="Certificate" name="certificate" formik={formik} />
         <Alert {...alertProps} />
         <Button color="green" {...buttonProps}>
           Создать пост!

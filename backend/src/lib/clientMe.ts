@@ -1,6 +1,6 @@
 import { type User } from '@prisma/client'
-import _ from 'lodash'
+import { pick } from '@BLOGS/shared/src/pick'
 
 export const toClientMe = (user: User | null) => {
-  return user && _.pick(user, ['email', 'id', 'nick', 'name', 'permissions', 'avatar'])
+  return user && pick(user, ['email', 'id', 'nick', 'name', 'permissions', 'avatar'])
 }

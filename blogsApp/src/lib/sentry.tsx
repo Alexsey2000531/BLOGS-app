@@ -7,6 +7,7 @@ if (env.VITE_WEBAPP_SENTRY_DSN) {
   Sentry.init({
     dsn: env.VITE_WEBAPP_SENTRY_DSN,
     environment: env.NODE_ENV,
+    release: env.SOURCE_VERSION,
     normalizeDepth: 10,
   })
 }

@@ -1,48 +1,45 @@
-import {PutObjectCommand} from '@aws-sdk/client-s3'
-import {getSignedUrl} from '@aws-sdk/s3-request-presigner'
+import { cloudinaryUploadTypes } from '@BLOGS/shared/src/cloudinary'
+import { v2 as cloudinary } from 'cloudinary'
 import { env } from '../../../lib/env'
-import {ExpectedError} from '../../../lib/error'
-import {getS3Client} from '../../../lib/s3'
-import {trpcLoggedProcedure} from '../../../lib/trpc'
-import {getRandomString} from '../../../utils/getRandomString'
-import { zPrepareS3UploadTrpcInput } from './input'
+import { trpcLoggedProcedure } from '../../../lib/trpc'
+import { zPrepareCloudinaryUploadTrpcInput } from './input'
 
-const maxFileSize = 10 * 1024 * 1024
+export const prepareCloudinaryUploadTrpcRoute = trpcLoggedProcedure
+  .input(zPrepareCloudinaryUploadTrpcInput)
+  .mutation(async ({ input }) => {
+    if (!env.CLOUDINARY_API_SECRET) {
+      throw new Error('CLOUDINARY_API_SECRET is missing')
+    }
+    if (!env.CLOUDINARY_API_KEY) {
+      throw new Error('CLOUDINARY_API_KEY is missing')
+    }
 
-export const prepareS3UploadTrpcRoute = trpcLoggedProcedure.input(zPrepareS3UploadTrpcInput).mutation(async ({input, ctx}) => {
-      if(input.fileSize > maxFileSize){
-            throw new ExpectedError('Размер файла должен быть меньше 10МБ')
-      }
+    const uploadType = cloudinaryUploadTypes[input.type]
 
-      const userId = ctx.me?.id;
-       
-      const fileKey = `${input.type}/${userId}/${Date.now()}-${input.fileName}`
-       const s3Key = `uploads/${getRandomString(32)}-${input.fileName}`
-      const uploadUrl = `https://${env.S3_BUCKET_NAME}.r2.cloudflarestorage.com/${s3Key}`
+    const timestamp = Math.round(new Date().getTime() / 1000)
+    const folder = uploadType.folder
+    const transformation = uploadType.transformation
+    const eager = Object.values(uploadType.presets).join('|')
 
-      const s3Client = getS3Client()
-      const signedUrl = await getSignedUrl(
-            s3Client,
-            new PutObjectCommand({
-                  Bucket: env.S3_BUCKET_NAME,
-                  Key: s3Key,
-                  ContentType: input.fileType,
-                  ContentLength: input.fileSize,
-            }),
-            {
-                  expiresIn: 3600,
-            }
-      )
+    const signature = cloudinary.utils.api_sign_request(
+      {
+        timestamp,
+        folder,
+        transformation,
+        eager,
+      },
+      env.CLOUDINARY_API_SECRET
+    )
 
-      return {
-            s3Key,
-            signedUrl,
-            uploadUrl,
-            fileKey,
-            method: 'PUT',
-            headers: {
-                  'Content-Type': input.fileType,
-                  'Content-Length': input.fileSize
-            }
-      }
-})
+    return {
+      preparedData: {
+        timestamp: `${timestamp}`,
+        folder,
+        transformation,
+        eager,
+        signature,
+        apiKey: env.CLOUDINARY_API_KEY,
+        url: `https://api.cloudinary.com/v1_1/${env.CLOUDINARY_CLOUD_NAME}/auto/upload`,
+      },
+    }
+  })

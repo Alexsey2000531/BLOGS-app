@@ -4,13 +4,11 @@ import { zUpdateProfileInput } from '@BLOGS/backend/src/router/auth/updateProfil
 import { zPasswordsMustBeTheSame, zStringRequired } from '@BLOGS/shared/src/zod'
 import { Link } from 'react-router-dom'
 import s from './index.module.scss'
-import Avatar from '../../../assets/images/avatar.svg?react'
 import { Alert } from '../../../components/Alert'
 import { Button } from '../../../components/Button'
 import { FormItems } from '../../../components/FormItems'
 import { Input } from '../../../components/Input'
-import { UploadToS3 } from '../../../components/UploadToS3/UploadToS3'
-import { env } from '../../../lib/env'
+import { Upload } from '../../../components/UploadCloudinary'
 import { useForm } from '../../../lib/form'
 import { wrapperPage } from '../../../lib/pageWrapper'
 import { getSignOutRoute } from '../../../lib/routes'
@@ -37,29 +35,17 @@ const General = ({ me }: { me: NonNullable<TrpcRouterOutput['getMe']['me']> }) =
         },
         false
       )
-      return updateMe
     },
     successMessage: 'Профиль обновлён!',
     resetOnSuccess: false,
   })
   return (
     <form onSubmit={formik.handleSubmit}>
-      <div className={s.avatar}>
-        {me.avatar ? (
-          <img
-            src={`https://${env.VITE_S3_BUCKET_NAME}.r2.cloudflarestorage.com/${me.avatar}`}
-            alt="Аватарка"
-            crossOrigin="anonymous"
-          />
-        ) : (
-          <Avatar />
-        )}
-      </div>
       <FormItems>
         <div className={s.center}>
           <Input label="Никнейм" name="nick" formik={formik} />
           <Input label="Имя" name="name" formik={formik} />
-          <UploadToS3 label="Avatar" name="avatar" type="avatar" formik={formik} />
+          <Upload label="Аватар" name="avatar" formik={formik} type="avatar" preset="small" />
           <Alert {...alertProps} />
         </div>
         <div className={s.button}>

@@ -1,6 +1,6 @@
 import { zEditPostTrpcInput } from '@BLOGS/backend/src/router/posts/EditPost/input'
 import { canEditPost } from '@BLOGS/backend/src/utils/canBlockedPost'
-import pick from 'lodash/pick'
+import { pick } from '@BLOGS/shared/src/pick'
 import { useNavigate } from 'react-router-dom'
 import s from './index.module.scss'
 import { Alert } from '../../../components/Alert'
@@ -8,7 +8,7 @@ import { Button } from '../../../components/Button'
 import { FormItems } from '../../../components/FormItems'
 import { Input } from '../../../components/Input'
 import { Textarea } from '../../../components/Textarea'
-import { UploadToS3 } from '../../../components/UploadToS3/UploadToS3'
+import { UploadsCloudinary } from '../../../components/UploadsCloudinary'
 import { useForm } from '../../../lib/form'
 import { wrapperPage } from '../../../lib/pageWrapper'
 import { getEditPostRoute, getViewPostRoute } from '../../../lib/routes'
@@ -50,8 +50,8 @@ export const EditPostPage = wrapperPage({
       <FormItems>
         <Input label="Заголовок" name="name" formik={formik} />
         <Input label="Краткое описание" name="description" maxWidth={500} formik={formik} />
+        <UploadsCloudinary label="Изображение" name="images" formik={formik} type="image" preset="preview" />
         <Textarea label="Описание" name="text" formik={formik} />
-        <UploadToS3 type="image" label="Certificate" name="certificate" formik={formik} />
         <Alert {...alertProps} />
         <Button color="green" {...buttonProps}>
           Редактировать пост!

@@ -15,8 +15,7 @@ import { getPostsTrpcRoute } from './posts/getPosts'
 import { setDisLikePostTrpcRoute } from './posts/setDisLikePost'
 import { setLikePostTrpcRoute } from './posts/setLikePost'
 import { zCreateCommentsTrpcRoute } from './posts/createComments'
-import { prepareS3UploadTrpcRoute } from './upload/prepareCloudflareUpload'
-import { updateFileUrlTrpcRoute } from './auth/updateFileUrl'
+import { prepareCloudinaryUploadTrpcRoute } from './upload/prepareCloudflareUpload'
 // @endindex
 
 export const trpcRouter = createTrpcRouter({
@@ -33,8 +32,7 @@ export const trpcRouter = createTrpcRouter({
   setDisLikePost: setDisLikePostTrpcRoute,
   blockPost: blockedPostTrpcRoute,
   addComments: zCreateCommentsTrpcRoute,
-  prepareS3Upload: prepareS3UploadTrpcRoute,
-  updateFile: updateFileUrlTrpcRoute,
+  prepareUpload: prepareCloudinaryUploadTrpcRoute,
 })
 
 export type TrpcRouter = typeof trpcRouter

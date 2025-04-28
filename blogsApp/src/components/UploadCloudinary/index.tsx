@@ -1,72 +1,74 @@
-/* eslint-disable no-undef */
-import { getS3UploadUrl, getS3UploadName } from '@BLOGS/shared/src/s3'
-import cn from 'classnames'
+import {
+  type CloudinaryUploadPresetName,
+  type CloudinaryUploadTypeName,
+  getCloudinaryUploadUrl,
+} from '@BLOGS/shared/src/cloudinary'
+import classNames from 'classnames'
 import { type FormikProps } from 'formik'
-import { useRef, useState } from 'react'
+import { memoize } from 'lodash'
+import { useRef, useState, useCallback } from 'react'
 import { trpc } from '../../lib/trpc'
 import { Button, Buttons } from '../Button'
 import s from './index.module.scss'
 
-export const useUploadToS3 = (type: 'avatar' | 'image') => {
-  const prepareS3Upload = trpc.prepareS3Upload.useMutation()
-  const updateFileUrl = trpc.updateFile.useMutation()
+export const useUpload = (type: CloudinaryUploadTypeName) => {
+  const prepareUpload = trpc.prepareUpload.useMutation()
 
-  const uploadToS3 = async (file: File) => {
-    const { signedUrl, s3Key } = await prepareS3Upload.mutateAsync({
-      type: type,
-      fileName: file.name,
-      fileType: file.type,
-      fileSize: file.size,
+  const getPrepareData = useCallback(
+    memoize(
+      async () => {
+        const { preparedData } = await prepareUpload.mutateAsync({ type })
+        return preparedData
+      },
+      () => JSON.stringify({ type, minutes: new Date().getMinutes() })
+    ),
+    [type]
+  )
+
+  const upload = async (file: File) => {
+    const preparedData = await getPrepareData()
+
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('timestamp', preparedData.timestamp)
+    formData.append('folder', preparedData.folder)
+    formData.append('api_key', preparedData.apiKey)
+    formData.append('transformation', preparedData.transformation)
+    formData.append('eager', preparedData.eager)
+    formData.append('signature', preparedData.signature)
+
+    // eslint-disable-next-line no-undef
+    return await fetch(preparedData.url, {
+      method: 'POST',
+      body: formData,
     })
-
-    console.info('Uploading to:', signedUrl) // Логируем URL
-    console.info('File size:', file.size)
-
-    const headers = {
-      'Content-Type': file.type,
-      'Content-Length': file.size.toString(),
-      Origin: window.location.origin,
-      'x-amz-acl': 'public-read',
-    }
-
-    try {
-      const response = await fetch(signedUrl, {
-        method: 'PUT',
-        headers,
-        body: file,
-        mode: 'cors',
-        credentials: 'include',
+      .then(async (rawRes) => {
+        return await rawRes.json()
       })
+      .then((res) => {
+        if (res.eror) {
+          throw new Error(res.error.message)
+        }
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        console.error('Upload failed:', response.status, errorText)
-        throw new Error(`Upload failed: ${response.status} - ${errorText}`)
-      } else {
-        const { fileUrl } = await updateFileUrl.mutateAsync({ fileKey: s3Key, type })
-        console.info(fileUrl)
-      }
-
-      return { s3Key }
-    } catch (error) {
-      console.error('Fetch error:', error)
-      throw error
-    }
+        return { publicId: res.public_id as string, res }
+      })
   }
 
-  return { uploadToS3 }
+  return { upload }
 }
 
-export const UploadToS3 = ({
+export const Upload = <TTypeName extends CloudinaryUploadTypeName>({
   label,
   name,
   formik,
   type,
+  preset,
 }: {
   label: string
   name: string
   formik: FormikProps<any>
-  type: 'avatar' | 'image'
+  type: TTypeName
+  preset: CloudinaryUploadPresetName<TTypeName>
 }) => {
   const value = formik.values[name]
   const error = formik.errors[name] as string | undefined
@@ -76,16 +78,15 @@ export const UploadToS3 = ({
 
   const inputEl = useRef<HTMLInputElement>(null)
   const [loading, setLoading] = useState(false)
-
-  const { uploadToS3 } = useUploadToS3(type)
+  const { upload } = useUpload(type)
 
   return (
-    <div className={cn({ [s.field]: true, [s.disabled]: disabled })}>
+    <div className={classNames({ [s.field]: true, [s.disabled]: disabled })}>
       <input
         className={s.fileInput}
         type="file"
         disabled={loading || disabled}
-        accept="*"
+        accept="image/*"
         ref={inputEl}
         onChange={({ target: { files } }) => {
           void (async () => {
@@ -93,11 +94,10 @@ export const UploadToS3 = ({
             try {
               if (files?.length) {
                 const file = files[0]
-                const { s3Key } = await uploadToS3(file)
-                void formik.setFieldValue(name, s3Key)
+                const { publicId } = await upload(file)
+                void formik.setFieldValue(name, publicId)
               }
             } catch (err: any) {
-              console.error(err)
               formik.setFieldError(name, err.message)
             } finally {
               void formik.setFieldTouched(name, true, false)
@@ -113,12 +113,8 @@ export const UploadToS3 = ({
         {label}
       </label>
       {!!value && !loading && (
-        <div className={s.uploads}>
-          <div className={s.upload}>
-            <a className={s.uploadLink} target="_blank" href={getS3UploadUrl(value)} rel="noreferrer">
-              {getS3UploadName(value)}
-            </a>
-          </div>
+        <div className={s.previewPlace}>
+          <img className={s.preview} alt="" src={getCloudinaryUploadUrl(value, type, preset)} />
         </div>
       )}
       <div className={s.buttons}>
@@ -130,7 +126,7 @@ export const UploadToS3 = ({
             disabled={loading || disabled}
             color="green"
           >
-            {value ? 'Upload another' : 'Upload'}
+            {value ? 'Загрузить другое' : 'Загрузить'}
           </Button>
           {!!value && !loading && (
             <Button
@@ -143,7 +139,7 @@ export const UploadToS3 = ({
               }}
               disabled={disabled}
             >
-              Remove
+              Удалить
             </Button>
           )}
         </Buttons>

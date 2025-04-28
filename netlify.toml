@@ -1,3 +1,0 @@
-[build]
-  command = "tsc -b && vite build"
-  publish = "blogsApp/dist"

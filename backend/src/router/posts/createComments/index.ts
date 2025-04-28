@@ -1,3 +1,4 @@
+import { ExpectedError } from '../../../lib/error'
 import { trpcLoggedProcedure } from '../../../lib/trpc'
 import { zCreateCommentsTrpcInput } from './input'
 
@@ -17,7 +18,7 @@ export const zCreateCommentsTrpcRoute = trpcLoggedProcedure
     })
 
     if (!post) {
-      throw new Error('Не найдено!')
+      throw new ExpectedError('Не найдено!')
     }
 
     const addComments = await ctx.prisma.comments.create({

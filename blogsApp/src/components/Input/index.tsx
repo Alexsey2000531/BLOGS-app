@@ -11,7 +11,7 @@ export const Input = ({
   type = 'text',
 }: {
   name: string
-  label: string
+  label?: string
   formik: FormikProps<any>
   maxWidth?: number | string
   placeholder?: string

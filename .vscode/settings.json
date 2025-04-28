@@ -1,4 +1,5 @@
 {
   "eslint.workingDirectories": ["backend", "blogsApp", "shared"],
-  "cSpell.words": ["presigner"]
+  "cSpell.words": ["presigner", "определён"],
+  "svg.preview.background": "editor"
 }

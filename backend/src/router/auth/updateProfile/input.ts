@@ -5,5 +5,4 @@ export const zUpdateProfileInput = z.object({
   nick: zNickRequired,
   name: z.string().max(50).default(''),
   avatar: z.string().nullable(),
-  fileKey: z.string().optional()
 })

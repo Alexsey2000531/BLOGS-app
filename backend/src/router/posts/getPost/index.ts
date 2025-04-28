@@ -1,6 +1,7 @@
-import _ from 'lodash'
+import { omit } from '@BLOGS/shared/src/omit'
 import { trpcLoggedProcedure } from '../../../lib/trpc'
 import { zGetPostInputTrpc } from './input'
+import { ExpectedError } from '../../../lib/error'
 
 export const getPostTrpcRoute = trpcLoggedProcedure.input(zGetPostInputTrpc).query(async ({ ctx, input }) => {
   const rawPost = await ctx.prisma.post.findUnique({
@@ -21,6 +22,7 @@ export const getPostTrpcRoute = trpcLoggedProcedure.input(zGetPostInputTrpc).que
           id: true,
           nick: true,
           name: true,
+          avatar: true,
         },
       },
       Like: {
@@ -50,7 +52,7 @@ export const getPostTrpcRoute = trpcLoggedProcedure.input(zGetPostInputTrpc).que
   })
 
   if (rawPost?.blockedAt) {
-    throw new Error('Этот пост заблокировал администратор!')
+    throw new ExpectedError('Этот пост заблокировал администратор!')
   }
 
   const isLikedByMe = !!rawPost?.Like.length
@@ -62,7 +64,7 @@ export const getPostTrpcRoute = trpcLoggedProcedure.input(zGetPostInputTrpc).que
   const commentsCount = rawPost?._count.Comments || 0
 
   const post = rawPost && {
-    ..._.omit(rawPost, ['Like', 'DisLike', '_count']),
+    ...omit(rawPost, ['Like', 'DisLike', '_count']),
     Comments: rawPost.Comments || [],
     isLikedByMe: isLikedByMe,
     likeCount: likeCount,

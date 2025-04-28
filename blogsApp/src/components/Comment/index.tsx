@@ -36,7 +36,7 @@ export const Comment = ({ postId, authorId }: { postId: string; authorId: string
       }}
     >
       <div className={s.comments}>
-        <Input name="content" label="Комментарий" formik={formik} placeholder="Напишите комментарий..." />
+        <Input name="content" formik={formik} placeholder="Напишите комментарий..." />
         <Button color="green" {...buttonProps}>
           {formik.isSubmitting ? 'Отправка...' : 'Отправить'}
         </Button>

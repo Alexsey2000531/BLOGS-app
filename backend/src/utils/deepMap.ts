@@ -31,7 +31,7 @@ const recursion = ({
   }
 
   if (_.isArray(result)) {
-    return result.map((item, index) => {
+    return result.map((item, index) =>
       recursion({
         input: item,
         replaceFn,
@@ -39,7 +39,7 @@ const recursion = ({
         pathStartsWith: `${pathStartsWith}${index}`,
         parentKey: index.toString(),
       })
-    })
+    )
   }
 
   if (_.isObject(result)) {

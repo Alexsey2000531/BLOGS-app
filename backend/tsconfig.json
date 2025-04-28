@@ -1,9 +1,15 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./src",
+    "outDir": "dist",
+    "rootDir": ".",
+    "baseUrl": "./src",
+    "paths": {
+      "@BLOGS/blogsApp/*": ["../blogsApp/src/*"],
+      "@BLOGS/shared/*": ["../shared/src/*"]
+    },
     "allowJs": true,
     "composite": true,
+    "sourceRoot": "/",
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
@@ -17,8 +23,8 @@
     "inlineSources": true,
     "isolatedModules": false,
     "lib": ["ES2020"],
-    "module": "ESNext",
-    "moduleResolution": "Node",
+    "module": "ES2022",
+    "moduleResolution": "node",
     "target": "ESNext"
   },
   "include": ["src/**/*"]

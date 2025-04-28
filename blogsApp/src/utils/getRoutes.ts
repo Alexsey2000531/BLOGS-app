@@ -1,9 +1,6 @@
 /* eslint-disable no-redeclare */
 import { useParams as useReactRouterParams } from 'react-router-dom'
 
-// eslint-disable-next-line no-undef
-const baseUrl = process.env.VITE_WEBAPP_URL || process.env.WEBAPP_URL
-
 type getRouteInputBase = {
   abs?: boolean
 }
@@ -38,7 +35,8 @@ function getRoutes(routeParamsOrGetRoutes?: any, maybeGetRoutes?: any) {
   const getedRoutes = (routeParams?: getRouteInputBase) => {
     const route = getRoute(routeParams)
     if (routeParams?.abs) {
-      return `${baseUrl}${route}`
+      // eslint-disable-next-line no-undef
+      return `${process.env.WEBAPP_URL}${route}`
     } else {
       return route
     }

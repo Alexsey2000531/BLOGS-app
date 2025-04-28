@@ -1,21 +1,19 @@
 import { zGetPostsTrpcInput } from '@BLOGS/backend/src/router/posts/getPosts/input'
-import { CardActions, CircularProgress, IconButton, TextField, Menu, MenuItem } from '@mui/material'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import CardHeader from '@mui/material/CardHeader'
-import Typography from '@mui/material/Typography'
+import { getAvatarUrl } from '@BLOGS/shared/src/cloudinary'
+import { EditOutlined, EllipsisOutlined } from '@ant-design/icons'
+import { CircularProgress, TextField } from '@mui/material'
+import { Card, Menu, Dropdown } from 'antd'
 import { format } from 'date-fns'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroller'
 import { Link } from 'react-router-dom'
 import { useDebounceValue } from 'usehooks-ts'
 import s from './index.module.scss'
-import MoreVertIcon from '../../../assets/images/more.png'
 import { Alert } from '../../../components/Alert'
 import { BlockPost } from '../../../components/BlockPost'
 import { useForm } from '../../../lib/form'
 import { wrapperPage } from '../../../lib/pageWrapper'
-import { getViewPostRoute } from '../../../lib/routes'
+import { getEditPostRoute, getViewPostRoute } from '../../../lib/routes'
 import { trpc } from '../../../lib/trpc'
 
 export const AllPostsPage = wrapperPage({
@@ -31,17 +29,9 @@ export const AllPostsPage = wrapperPage({
     },
     validationSchema: zGetPostsTrpcInput.pick({ search: true }),
   })
-  const [isOpen, setIsOpen] = useState<null | HTMLElement>(null)
+
+  const [openedPostNick, setOpenedPostNick] = useState<string | null>(null)
   const [search, setSearch] = useDebounceValue(formik.values.search, 500)
-  const open = Boolean(isOpen)
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setIsOpen(event?.currentTarget)
-  }
-
-  const handleClose = () => {
-    setIsOpen(null)
-  }
 
   useEffect(() => {
     setSearch(formik.values.search)
@@ -101,56 +91,78 @@ export const AllPostsPage = wrapperPage({
         >
           {data.pages
             .flatMap((page) => page.posts)
-            .map((post) => (
-              <Card className={s.card} key={post.nick} sx={{ marginBottom: 2 }}>
-                <CardHeader
-                  className={s.header}
-                  title={<Link to={getViewPostRoute({ postNick: post.nick })}>{post.name}</Link>}
-                  subheader={`Дата публикации: ${format(post.createdAt, 'dd.MM.yyyy')}`}
-                  action={
-                    me?.permissions?.includes('ALL') ? (
-                      <div>
-                        <IconButton
-                          aria-label="Ещё"
-                          aria-controls="post-actions-menu"
-                          onClick={(event) => {
-                            handleClick(event)
-                          }}
-                          aria-haspopup="true"
-                        >
-                          <img src={MoreVertIcon} alt="Ещё" />
-                        </IconButton>
-                        <Menu
-                          id="post-actions-menu"
-                          open={open}
-                          onClick={() => handleClose()}
-                          anchorOrigin={{
-                            vertical: 'center',
-                            horizontal: 'center',
-                          }}
-                          transformOrigin={{
-                            vertical: 'center',
-                            horizontal: 'center',
-                          }}
-                        >
-                          <MenuItem>
-                            <BlockPost post={post} />
-                          </MenuItem>
-                        </Menu>
-                      </div>
-                    ) : null
-                  }
-                />
-                <CardContent>
-                  <Typography variant="body2" color="text.secondary">
-                    {post.description}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  {`Лайков: ${post.likesCount} | Дизлайков: ${post.disLikesCount} | Комментариев: ${post.commentsCount}`}
-                </CardActions>
-              </Card>
-            ))}
+            .map((post) => {
+              const isCurrentOpen = openedPostNick === post.nick
+
+              const handleClick = () => {
+                setOpenedPostNick(post.nick)
+              }
+
+              const handleClose = () => {
+                setOpenedPostNick(null)
+              }
+
+              const menu = (
+                <Menu onClick={handleClose}>
+                  <Menu.Item key="block">
+                    <BlockPost post={post} />
+                  </Menu.Item>
+                </Menu>
+              )
+              return (
+                <Card
+                  className={s.card}
+                  key={post.nick}
+                  style={{ marginBottom: 16 }}
+                  actions={[
+                    <Link to={getEditPostRoute({ postNick: post.nick })}>
+                      <EditOutlined key="edit" />
+                    </Link>,
+                    me?.permissions?.includes('ALL') && (
+                      <Dropdown
+                        overlay={menu}
+                        trigger={['click']}
+                        open={isCurrentOpen}
+                        onOpenChange={(visible) => {
+                          if (visible) {
+                            handleClick()
+                          } else {
+                            handleClose()
+                          }
+                        }}
+                      >
+                        <EllipsisOutlined style={{ fontSize: '18px', cursor: 'pointer' }}></EllipsisOutlined>
+                      </Dropdown>
+                    ),
+                  ].filter(Boolean)}
+                >
+                  <Card.Meta
+                    className={s.cardMeta}
+                    avatar={
+                      post.author?.avatar ? (
+                        <img
+                          className={s.cardMetaAvatar}
+                          src={getAvatarUrl(post.author?.avatar, 'small')}
+                          alt="avatar"
+                        />
+                      ) : (
+                        <img className={s.cardMetaAvatar} src={getAvatarUrl(null, 'small')} alt="avatar" />
+                      )
+                    }
+                    title={<Link to={getViewPostRoute({ postNick: post.nick })}>{post.name}</Link>}
+                    description={`Опубликовано: ${format(post.createdAt, 'dd.MM.yyyy')}`}
+                  />
+                  <div className={s.cardContent}>
+                    <p>{post.description}</p>
+                  </div>
+                  <div className={s.cardStats}>
+                    <span>❤️ {post.likesCount}</span>
+                    <span>👎 {post.disLikesCount}</span>
+                    <span>💬 {post.commentsCount}</span>
+                  </div>
+                </Card>
+              )
+            })}
         </InfiniteScroll>
       )}
     </div>

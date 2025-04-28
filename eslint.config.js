@@ -8,6 +8,7 @@ export default [
   js.configs.recommended,
   standardWithTypescript,
   prettier,
+  jest / recommended,
   {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
@@ -19,6 +20,7 @@ export default [
     },
     plugins: {
       node: nodePlugin,
+      jest,
       import: importPlugin,
     },
     rules: {
@@ -60,6 +62,6 @@ export default [
     },
   },
   {
-    ignores: ['node_modules', 'dist'],
+    ignores: ['node_modules', 'dist', '*.config.js'],
   },
 ]

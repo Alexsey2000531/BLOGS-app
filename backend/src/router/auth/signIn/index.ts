@@ -1,3 +1,4 @@
+import { ExpectedError } from '../../../lib/error'
 import { trpcLoggedProcedure } from '../../../lib/trpc'
 import { getPasswordHash } from '../../../utils/getPasswordHash'
 import { signJwt } from '../../../utils/signJwt'
@@ -12,7 +13,7 @@ export const signInTrpcRoute = trpcLoggedProcedure.input(zSignInTrpcRoute).mutat
   })
 
   if (!user) {
-    throw Error('Неправильный никнейм или пароль!')
+    throw new ExpectedError('Неправильный никнейм или пароль!')
   }
 
   const token = signJwt(user.id)

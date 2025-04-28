@@ -28,11 +28,13 @@ const customTrpcLink: TRPCLink<TrpcRouter> = () => {
           observer.next(value)
         },
         error(error) {
-          if (env.NODE_ENV === 'development') {
-            // eslint-disable-next-line no-undef, no-console
-            console.error(error)
+          if (!error.data?.isExpected) {
+            sentryCaptureException(error)
+            if (env.NODE_ENV === 'development') {
+              // eslint-disable-next-line no-undef, no-console
+              console.error(error)
+            }
           }
-          sentryCaptureException(error)
           observer.error(error)
         },
         complete() {

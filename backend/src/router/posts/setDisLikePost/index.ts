@@ -29,7 +29,7 @@ export const setDisLikePostTrpcRoute = trpcLoggedProcedure
         },
       })
 
-      // ставим дbзлайк на пост
+      // ставим дизлайк на пост
       await ctx.prisma.disLike.upsert({
         where: {
           postId_authorId: {

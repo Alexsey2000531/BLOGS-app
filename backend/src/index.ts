@@ -10,10 +10,12 @@ import { applyTrpcToExpressApp } from './lib/trpc'
 import { trpcRouter } from './router'
 import { presetDb } from './scripts/presetDb'
 import { logger } from './lib/logger'
+import { initSentry } from './lib/sentry'
 
 void (async () => {
   let ctx: AppContext | null = null
   try {
+    initSentry()
     ctx = createAppContext()
     await presetDb(ctx)
     const expressApp = express()

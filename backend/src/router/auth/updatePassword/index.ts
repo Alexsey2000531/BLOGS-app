@@ -1,3 +1,4 @@
+import { ExpectedError } from '../../../lib/error'
 import { trpcLoggedProcedure } from '../../../lib/trpc'
 import { getPasswordHash } from '../../../utils/getPasswordHash'
 import { zUpdatePasswordInput } from './input'
@@ -10,7 +11,7 @@ export const updatePasswordTrpcRoute = trpcLoggedProcedure
     }
 
     if (ctx.me.password !== getPasswordHash(input.currentPassword)) {
-      throw new Error('Неверный старый пароль!')
+      throw new ExpectedError('Неверный старый пароль!')
     }
 
     const updateMe = await ctx.prisma.user.update({

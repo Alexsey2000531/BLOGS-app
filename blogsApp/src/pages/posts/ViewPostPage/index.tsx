@@ -1,6 +1,7 @@
 import { canEditPost } from '@BLOGS/backend/src/utils/canBlockedPost'
-import { getS3UploadName, getS3UploadUrl } from '@BLOGS/shared/src/s3'
+import { getAvatarUrl, getCloudinaryUploadUrl } from '@BLOGS/shared/src/cloudinary'
 import { format } from 'date-fns'
+import ImageGallery from 'react-image-gallery'
 import s from './index.module.scss'
 import { LinkButton } from '../../../components/Button'
 import { Comment } from '../../../components/Comment'
@@ -28,51 +29,64 @@ export const ViewPostPage = wrapperPage({
 })(({ post, me }) => {
   return (
     <Segment title={'Мой пост'} description={post?.description}>
-      <div className={s.text} dangerouslySetInnerHTML={{ __html: post?.text }} />
-      <div className={s.info}>
-        <div className={s.author}>
-          Автор: {post.author.nick}
-          {post.author.name ? `(${post.author.name})` : ''}
+      <article className={s.content}>
+        <div className={s.text} dangerouslySetInnerHTML={{ __html: post?.text }} />
+      </article>
+      <div className={s.postHeader}>
+        <div className={s.authorInfo}>
+          <img className={s.avatar} alt="avatar" src={getAvatarUrl(post.author.avatar, 'small')} />
+          <div className={s.meta}>
+            <span className={s.authorName}>
+              {post.author.nick || post.author.name}
+              {post.author.name && <span className={s.nickName}>@{post.author.name}</span>}
+            </span>
+            <span className={s.date}>Дата публикации: {format(post.createdAt, 'dd.MM.yyyy')}</span>
+          </div>
         </div>
-        <div className={s.date}>Дата публикации: {format(post.createdAt, 'dd.MM.yyyy')}</div>
+
+        {canEditPost(me, post) && (
+          <div className={s.editPost}>
+            <LinkButton to={getEditPostRoute({ postNick: post.nick })}>Редактировать пост</LinkButton>
+          </div>
+        )}
       </div>
-      {post.certificate && (
-        <div className={s.certificate}>
-          Certificate:{' '}
-          <a className={s.certificateLink} target="_blank" href={getS3UploadUrl(post.certificate)}>
-            {getS3UploadName(post.certificate)}
-          </a>
+
+      {!!post.images.length && (
+        <div className={s.galleryWrapper}>
+          <ImageGallery
+            showPlayButton={false}
+            showFullscreenButton={false}
+            items={post.images.map((image) => ({
+              original: getCloudinaryUploadUrl(image, 'image', 'large'),
+              thumbnail: getCloudinaryUploadUrl(image, 'image', 'preview'),
+            }))}
+            additionalClass={s.gallery}
+          />
         </div>
       )}
-      <CommentsList postNick={post.nick} />
+
       <div className={s.postInfo}>
-        <div className={s.formComments}>{me && <Comment postId={post.id} authorId={me.id} />}</div>
-        <div className={s.content_info}>
-          <div className={s.likes}>
-            {me && (
-              <>
-                <br />
-                <LikeButton post={post} />
-              </>
-            )}
-            <p>Лайков: {post.likeCount}</p>
+        <div className={s.reactions}>
+          <div className={s.reaction}>
+            {me && <LikeButton post={post} />}
+            <span className={s.reactionCount}>{post.likeCount}</span>
           </div>
-          <div className={s.disLikes}>
-            {me && (
-              <>
-                <br />
-                <DisLikeButton post={post} />
-              </>
-            )}
-            <p>Дизлайков: {post.disLikeCount}</p>
+          <div className={s.reaction}>
+            {me && <DisLikeButton post={post} />}
+            <span className={s.reactionCount}>{post.disLikeCount}</span>
           </div>
         </div>
       </div>
-      {canEditPost(me, post) && (
-        <div className={s.editPost}>
-          <LinkButton to={getEditPostRoute({ postNick: post.nick })}>Редактировать пост</LinkButton>
-        </div>
-      )}
+
+      <div className={s.commentsSection}>
+        <h3 className={s.commentsTitle}>Комментарии</h3>
+        <CommentsList postNick={post.nick} />
+        {me && (
+          <div className={s.commentForm}>
+            <Comment postId={post.id} authorId={me.id} />
+          </div>
+        )}
+      </div>
     </Segment>
   )
 })

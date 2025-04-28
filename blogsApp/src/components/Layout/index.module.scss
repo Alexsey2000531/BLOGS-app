@@ -1,80 +1,151 @@
-@use '../../styles/vars' as *;
-@use '../../styles/mixins' as *;
-
 .layout {
   display: flex;
-  flex-flow: row nowrap;
-  height: 100%;
-  @media ($breakpoint) {
-    flex-flow: column nowrap;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.navigation {
+  width: 280px;
+  background: linear-gradient(135deg, #2c3e50 0%, #1a1a2e 100%);
+  padding: 30px 20px;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.logo {
+  width: 80%;
+  max-width: 180px;
+  margin: 0 auto 40px;
+  fill: white;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: all 0.5s ease;
   }
 
-  .navigation {
-    height: 100%;
-    overflow: auto;
-    flex: 0 0 200px;
-    padding: 20px 30px;
-    border-right: 1px solid $black;
-    @media ($breakpoint) {
-      overflow: visible;
-      flex: 0 0 auto;
-      height: auto;
-      border-right: none;
-      border-bottom: 1px solid $black;
-    }
+  &:hover:before {
+    left: 100%;
+  }
 
-    .logo {
-      padding-top: 2px;
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(5px);
+  }
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  position: relative;
+  transition: all 0.3s ease;
+
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    transition: width 0.3s ease;
+  }
+
+  &:hover {
+    color: white;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+
+    &:after {
       width: 100%;
-      min-width: 130px;
-      cursor: pointer;
-      height: auto;
-      margin-bottom: 15px;
     }
+  }
+}
 
-    .menu {
-      display: flex;
-      flex-direction: column;
+.content {
+  flex: 1;
+  margin-left: 280px;
+  padding: 30px;
+  background-color: white;
+  min-height: 100vh;
+}
 
-      .item {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        margin-bottom: 10px;
-        cursor: pointer;
-        width: 100%;
-        min-width: 130px;
-        padding: 5px 0;
-        border-bottom: 1px solid black;
+// Адаптивность для мобильных устройств
+@media (width <= 768px) {
+  .navigation {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 20px 15px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-        &:not(:first-child) {
-          margin-top: 5px;
-        }
+  .logo {
+    width: 120px;
+    margin: 0;
+  }
 
-        .link {
-          @include link;
-        }
-      }
+  .menu {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 5px;
+  }
 
-      .itemBottom {
-        margin-top: 5px;
-        border-bottom: 1px solid black;
+  .item {
+    width: 100%;
+    text-align: center;
+  }
 
-        .link {
-          @include link;
-        }
-      }
-    }
+  .link {
+    padding: 8px 12px;
+    font-size: 14px;
   }
 
   .content {
-    height: 100%;
-    overflow: auto;
-    flex: 1 1 100%;
-    padding: 20px 30px;
-    @media ($breakpoint) {
-      overflow: visible;
-      height: auto;
-    }
+    margin-left: 0;
+    padding: 20px 15px;
   }
 }

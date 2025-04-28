@@ -6,5 +6,6 @@ export const zCreatePostTrpcInput = z.object({
   nick: zNickRequired,
   description: zStringMin(5).max(100, 'Максимальное кол-во символов 100'),
   text: zStringMin(100),
-  certificate: z.string().nullable()
+  certificate: z.string().nullable(),
+  images: z.array(zStringRequired),
 })

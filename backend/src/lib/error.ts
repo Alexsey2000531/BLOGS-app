@@ -1,3 +1,3 @@
 export class ExpectedError extends Error {
-      isExpected = true
+  isExpected = true
 }

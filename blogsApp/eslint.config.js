@@ -87,6 +87,7 @@ export default [
                 '!@BLOGS/backend/**/',
                 '!@BLOGS/backend/**/input',
                 '!@BLOGS/backend/src/utils/canBlockedPost',
+                '!@BLOGS/backend/src/lib/error',
               ],
               allowTypeImports: true,
             },

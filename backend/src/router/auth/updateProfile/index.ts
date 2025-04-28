@@ -1,7 +1,7 @@
 import { toClientMe } from '../../../lib/clientMe'
 import { trpcLoggedProcedure } from '../../../lib/trpc'
 import { zUpdateProfileInput } from './input'
-import { env } from '../../../lib/env'
+import { ExpectedError } from '../../../lib/error'
 export const updateProfileTprcRoute = trpcLoggedProcedure
   .input(zUpdateProfileInput)
   .mutation(async ({ ctx, input }) => {
@@ -16,13 +16,8 @@ export const updateProfileTprcRoute = trpcLoggedProcedure
         },
       })
       if (exUser) {
-        throw Error('Никнейм уже существует!')
+        throw new ExpectedError('Никнейм уже существует!')
       }
-    }
-
-    let fileUrl: string | undefined
-    if (input.fileKey) {
-      fileUrl = `https://${env.S3_BUCKET_NAME}.r2.cloudflarestorage.com/${input.fileKey}`
     }
 
     const updateMe = await ctx.prisma.user.update({
@@ -32,9 +27,10 @@ export const updateProfileTprcRoute = trpcLoggedProcedure
       data: {
         nick: input.nick,
         name: input.name,
-        ...(fileUrl && { avatar: fileUrl }),
+        avatar: input.avatar,
       },
     })
+
     ctx.me = updateMe
     return toClientMe(updateMe)
   })

@@ -1,3 +1,4 @@
+import { ExpectedError } from '../../../lib/error'
 import { trpcLoggedProcedure } from '../../../lib/trpc'
 import { zCreatePostTrpcInput } from './input'
 
@@ -12,7 +13,7 @@ export const createPostTrpcRoute = trpcLoggedProcedure.input(zCreatePostTrpcInpu
   })
 
   if (exPost) {
-    throw Error('Пост с таким Никнеймом уже существует!')
+    throw new ExpectedError('Пост с таким Никнеймом уже существует!')
   }
 
   await ctx.prisma.post.create({

@@ -1,6 +1,7 @@
 import winston from 'winston'
-import _ from 'lodash'
+import { omit } from '@BLOGS/shared/src/omit'
 import { EOL } from 'os'
+import _ from 'lodash'
 import { MESSAGE } from 'triple-beam'
 import * as yaml from 'yaml'
 import { serializeError } from 'serialize-error'
@@ -8,6 +9,9 @@ import pc from 'picocolors'
 import { env } from './env'
 import debug from 'debug'
 import { deepMap } from '../utils/deepMap'
+import { ExpectedError } from './error'
+import { TRPCError } from '@trpc/server'
+import { sentryCaptureException } from './sentry'
 
 export const winstonLogger = winston.createLogger({
   level: 'debug',
@@ -33,7 +37,7 @@ export const winstonLogger = winston.createLogger({
               const levelAndType = `${logData.level} ${logData.logType}`
               const topMessage = `${setColor(levelAndType)} ${EOL}${logData.message}`
 
-              const visibleMessageTags = _.omit(logData, [
+              const visibleMessageTags = omit(logData, [
                 'level',
                 'logType',
                 'timestamp',
@@ -43,7 +47,7 @@ export const winstonLogger = winston.createLogger({
               ])
 
               const stringifyedLogData = _.trim(
-                yaml.stringify(visibleMessageTags, (k, v) => (_.isFunction(v) ? 'Function' : v))
+                yaml.stringify(visibleMessageTags, (v) => (_.isFunction(v) ? 'Function' : v))
               )
 
               const resultLogData = {
@@ -60,11 +64,24 @@ export const winstonLogger = winston.createLogger({
   ],
 })
 
-type Meta = Record<string, any> | undefined
+export type LoggerMetaData = Record<string, any> | undefined
 
-const prettifyMeta = (meta: Meta): Meta => {
+const prettifyMeta = (meta: LoggerMetaData): LoggerMetaData => {
   return deepMap(meta, ({ key, value }) => {
-    if (['email', 'password', 'newPassword', 'oldPassword', 'token', 'text', 'description'].includes(key)) {
+    if (
+      [
+        'email',
+        'password',
+        'newPassword',
+        'oldPassword',
+        'token',
+        'text',
+        'description',
+        'apiKey',
+        'signature',
+        '',
+      ].includes(key)
+    ) {
       return '🙈'
     }
 
@@ -73,7 +90,7 @@ const prettifyMeta = (meta: Meta): Meta => {
 }
 
 export const logger = {
-  info: (props: { logType: string; message: string; meta?: Meta }) => {
+  info: (props: { logType: string; message: string; meta?: LoggerMetaData }) => {
     if (!debug.enabled(`postnick:${props.logType}`)) {
       return
     }
@@ -81,7 +98,13 @@ export const logger = {
       winstonLogger.info(props.message, { logType: props.logType, ...prettifyMeta(props.meta) })
     }
   },
-  error: (props: { logType: string; error: any; meta?: Meta }) => {
+  error: (props: { logType: string; error: any; meta?: LoggerMetaData }) => {
+    const isNativeExpectedError = props.error instanceof ExpectedError
+    const isTrpcExpectedError = props.error instanceof TRPCError && props.error.cause instanceof ExpectedError
+    const prettifiedMeta = prettifyMeta(props.meta)
+    if (!isNativeExpectedError && !isTrpcExpectedError) {
+      sentryCaptureException(props.error, prettifiedMeta)
+    }
     if (!debug.enabled(`postnick:${props.logType}`)) {
       return
     }
@@ -90,7 +113,7 @@ export const logger = {
       logType: props.logType,
       error: props.error,
       errorStack: serializedError.stack,
-      ...prettifyMeta(props.meta),
+      ...prettifiedMeta,
     })
   },
 }

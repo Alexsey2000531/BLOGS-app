@@ -1,3 +1,4 @@
+import { ExpectedError } from '../../../lib/error'
 import { trpcLoggedProcedure } from '../../../lib/trpc'
 import { canBlockedPost } from '../../../utils/canBlockedPost'
 import { zBlockedPostInput } from './input'
@@ -19,7 +20,7 @@ export const blockedPostTrpcRoute = trpcLoggedProcedure.input(zBlockedPostInput)
   })
 
   if (!post) {
-    throw new Error('Не найден!')
+    throw new ExpectedError('Не найден!')
   }
 
   await ctx.prisma.post.update({
