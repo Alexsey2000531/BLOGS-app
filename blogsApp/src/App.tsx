@@ -2,6 +2,7 @@ import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { AppContextProvider } from './lib/ctx'
+import { MixpanelUser } from './lib/mixpanel.tsx'
 import * as router from './lib/routes'
 import { SentryUser } from './lib/sentry.tsx'
 import { TrpcProvider } from './lib/trpc'
@@ -24,6 +25,7 @@ export const App = () => {
         <AppContextProvider>
           <BrowserRouter>
             <SentryUser />
+            <MixpanelUser />
             <Routes>
               <Route path={router.getSignOutRoute.definition} element={<SignOutPage />} />
               <Route element={<Layout />}>

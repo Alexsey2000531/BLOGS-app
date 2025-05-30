@@ -43,7 +43,7 @@ export const CreatePostPage = wrapperPage({
     >
       <h1 className={s.title}>Создать пост</h1>
       <FormItems>
-        <Input name="name" label="Имя" formik={formik} />
+        <Input name="name" label="Название поста" formik={formik} />
         <Input name="nick" label="Никнейм" formik={formik} />
         <Input name="description" label="Описание" formik={formik} maxWidth={500} />
         <UploadsCloudinary label="Изображение" name="images" formik={formik} type="image" preset="preview" />

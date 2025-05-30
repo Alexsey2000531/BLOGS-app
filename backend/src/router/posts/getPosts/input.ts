@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { zStringOptional } from '@BLOGS/shared/src/zod'
+import { zStringOptional } from '@BLOGS/shared/dist/zod.js'
 
 export const zGetPostsTrpcInput = z.object({
   cursor: z.coerce.number().optional(),

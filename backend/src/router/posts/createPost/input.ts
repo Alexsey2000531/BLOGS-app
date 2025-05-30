@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { zNickRequired, zStringMin, zStringRequired } from '@BLOGS/shared/src/zod'
+import { zNickRequired, zStringMin, zStringRequired } from '@BLOGS/shared/dist/zod.js'
 
 export const zCreatePostTrpcInput = z.object({
   name: zStringRequired,

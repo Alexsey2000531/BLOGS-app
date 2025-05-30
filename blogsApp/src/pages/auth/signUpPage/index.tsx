@@ -1,5 +1,5 @@
 import { zSignUpTrpcInput } from '@BLOGS/backend/src/router/auth/signUp/input'
-import { zPasswordsMustBeTheSame, zStringRequired } from '@BLOGS/shared/src/zod'
+import { zPasswordsMustBeTheSame, zStringRequired } from '@BLOGS/shared/dist/zod.js'
 import Cookies from 'js-cookie'
 import { Link } from 'react-router-dom'
 import s from './index.module.scss'
@@ -8,6 +8,7 @@ import { Button } from '../../../components/Button'
 import { FormItems } from '../../../components/FormItems'
 import { Input } from '../../../components/Input'
 import { useForm } from '../../../lib/form'
+import { mixpanelAlias, mixpanelTrackSignUp } from '../../../lib/mixpanel'
 import { wrapperPage } from '../../../lib/pageWrapper'
 import { getSignInRoute } from '../../../lib/routes'
 import { trpc } from '../../../lib/trpc'
@@ -31,7 +32,9 @@ export const SignUpPage = wrapperPage({
       })
       .superRefine(zPasswordsMustBeTheSame('password', 'passwordAgain')),
     onSubmit: async (values) => {
-      const { token } = await signUp.mutateAsync(values)
+      const { token, userId } = await signUp.mutateAsync(values)
+      mixpanelAlias(userId)
+      mixpanelTrackSignUp()
       Cookies.set('token', token, { expires: 99999 })
       void trpcUtils.invalidate()
     },

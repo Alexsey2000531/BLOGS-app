@@ -1,4 +1,4 @@
-import { zNickRequired, zEmailRequired, zStringRequired } from '@BLOGS/shared/src/zod'
+import { zNickRequired, zEmailRequired, zStringRequired } from '@BLOGS/shared/dist/zod.js'
 import { z } from 'zod'
 
 export const zSignInTrpcRoute = z.object({

@@ -2,7 +2,7 @@ import { ExpectedError } from '../../../lib/error'
 import { trpcLoggedProcedure } from '../../../lib/trpc'
 import { getPasswordHash } from '../../../utils/getPasswordHash'
 import { signJwt } from '../../../utils/signJwt'
-import { zSignInTrpcRoute } from './input'
+import { zSignInTrpcRoute } from './Input'
 
 export const signInTrpcRoute = trpcLoggedProcedure.input(zSignInTrpcRoute).mutation(async ({ ctx, input }) => {
   const user = await ctx.prisma.user.findFirst({
@@ -17,5 +17,5 @@ export const signInTrpcRoute = trpcLoggedProcedure.input(zSignInTrpcRoute).mutat
   }
 
   const token = signJwt(user.id)
-  return { token }
+  return { token, userId: user.id }
 })

@@ -1,7 +1,7 @@
 import type { TrpcRouterOutput } from '@BLOGS/backend/src/router'
 import { zUpdatePasswordInput } from '@BLOGS/backend/src/router/auth/updatePassword/input'
 import { zUpdateProfileInput } from '@BLOGS/backend/src/router/auth/updateProfile/Input'
-import { zPasswordsMustBeTheSame, zStringRequired } from '@BLOGS/shared/src/zod'
+import { zPasswordsMustBeTheSame, zStringRequired } from '@BLOGS/shared/dist/zod.js'
 import { Link } from 'react-router-dom'
 import s from './index.module.scss'
 import { Alert } from '../../../components/Alert'

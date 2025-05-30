@@ -2,8 +2,8 @@ import { MessageOutlined, FormOutlined, UserOutlined } from '@ant-design/icons'
 import { createRef } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import s from './index.module.scss'
+import Logo from '../../assets/images/blog.png'
 import Exit from '../../assets/images/exit.png'
-import Logo from '../../assets/images/logo.svg?react'
 import Registration from '../../assets/images/registration.png'
 import { useMe } from '../../lib/ctx'
 import {
@@ -21,7 +21,7 @@ export const Layout = () => {
   return (
     <div className={s.layout}>
       <div className={s.navigation}>
-        <Logo className={s.logo} />
+        <img src={Logo} className={s.logo} alt="Логотип" />
         <ul className={s.menu}>
           <li className={s.item}>
             <Link className={s.link} to={getAllPostsRoute()}>

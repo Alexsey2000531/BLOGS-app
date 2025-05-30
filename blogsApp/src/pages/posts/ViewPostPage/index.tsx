@@ -1,5 +1,5 @@
 import { canEditPost } from '@BLOGS/backend/src/utils/canBlockedPost'
-import { getAvatarUrl, getCloudinaryUploadUrl } from '@BLOGS/shared/src/cloudinary'
+import { getCloudinaryUploadUrl } from '@BLOGS/shared/src/cloudinary'
 import { format } from 'date-fns'
 import ImageGallery from 'react-image-gallery'
 import s from './index.module.scss'
@@ -34,7 +34,6 @@ export const ViewPostPage = wrapperPage({
       </article>
       <div className={s.postHeader}>
         <div className={s.authorInfo}>
-          <img className={s.avatar} alt="avatar" src={getAvatarUrl(post.author.avatar, 'small')} />
           <div className={s.meta}>
             <span className={s.authorName}>
               {post.author.nick || post.author.name}
@@ -68,11 +67,11 @@ export const ViewPostPage = wrapperPage({
       <div className={s.postInfo}>
         <div className={s.reactions}>
           <div className={s.reaction}>
-            {me && <LikeButton post={post} />}
+            {me ? <LikeButton post={post} /> : `Лайков:`}
             <span className={s.reactionCount}>{post.likeCount}</span>
           </div>
           <div className={s.reaction}>
-            {me && <DisLikeButton post={post} />}
+            {me ? <DisLikeButton post={post} /> : `Дизлайков:`}
             <span className={s.reactionCount}>{post.disLikeCount}</span>
           </div>
         </div>

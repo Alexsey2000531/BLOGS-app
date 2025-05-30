@@ -4,6 +4,7 @@
   "type": "module",
   "version": "0.0.0",
   "scripts": {
+    "build": "rimraf ./dist && tsc --build tsconfig.json",
     "types": "tsc --noEmit --project ./tsconfig.json",
     "test": "jest --detectOpenHandles",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/.eslintcache .ts .",

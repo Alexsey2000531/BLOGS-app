@@ -2,6 +2,7 @@ import type { TrpcRouterOutput } from '@BLOGS/backend/src/router'
 import { trpc } from '../../lib/trpc'
 import { Icon } from '../icon'
 import s from './index.module.scss'
+import { mixpanelPostDisLike } from '../../lib/mixpanel'
 
 export const DisLikeButton = ({ post }: { post: NonNullable<TrpcRouterOutput['getPost']['post']> }) => {
   const trpcUtils = trpc.useContext()
@@ -14,7 +15,7 @@ export const DisLikeButton = ({ post }: { post: NonNullable<TrpcRouterOutput['ge
           post: {
             ...oldGetPostData.post,
             isDisLikedByMe,
-            // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+
             disLikesCount: oldGetPostData.post.disLikeCount + (isDisLikedByMe ? 1 : -1),
           },
         }
@@ -29,7 +30,13 @@ export const DisLikeButton = ({ post }: { post: NonNullable<TrpcRouterOutput['ge
     <button
       className={s.disLikeButton}
       onClick={() => {
-        void setDisLikePost.mutateAsync({ postId: post.id, isDisLikedByMe: !post.isDisLikedByMe })
+        void setDisLikePost
+          .mutateAsync({ postId: post.id, isDisLikedByMe: !post.isDisLikedByMe })
+          .then(({ post: { isDisLikedByMe } }) => {
+            if (isDisLikedByMe) {
+              mixpanelPostDisLike(post)
+            }
+          })
       }}
     >
       {post.isDisLikedByMe ? <Icon size={24} name="dislikeFilled" /> : <Icon size={24} name="dislikeEmpty" />}
